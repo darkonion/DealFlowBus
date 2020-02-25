@@ -1,6 +1,10 @@
 package com.dealflowbus.databasemainreader.controller;
 
 import java.net.URI;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,7 +36,7 @@ public class LeadController {
 	@Autowired
 	private NoteRepository noteRepo;
 	
-	
+
 	
 	
 	
@@ -42,7 +46,7 @@ public class LeadController {
 	//getting lead by id
 	@GetMapping("/leads")
 	private List<Lead> getAllLeads() {
-		
+	System.out.println(LocalDate.now());	
 		return leadRepo.findAll();
 	}
 	
@@ -50,7 +54,7 @@ public class LeadController {
 	//getting lead list
 	@GetMapping("/leads/{id}")
 	private Lead getLead(@PathVariable int id) {
-		
+	System.out.println(LocalDate.now());	
 		Lead lead = retrieveLead(id);
 		
 		return lead;
@@ -61,7 +65,9 @@ public class LeadController {
 	@PostMapping("/leads")
 	private ResponseEntity<Lead> saveLead(@RequestBody Lead lead) {
 		
-
+		lead.setDateArrival(LocalDate.now());
+		lead.setLastTouched(LocalDate.now());
+		System.out.println(lead.getDateArrival());
 		Lead savedLead = leadRepo.save(lead);
 		
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -81,18 +87,18 @@ public class LeadController {
 			
 			Lead lead = retrieveLead(id);
 				
-				//retrieving current lead detail id
-				int tempId = lead.getDetail().getDescId();
+			//retrieving current lead detail id
+			int tempId = lead.getDetail().getDescId();
 			
-				//assigning current lead detail to new detail
-				detail.setDescId(tempId);
+			//assigning current lead detail to new detail
+			detail.setDescId(tempId);
 				
-				//setting new detail to retrieved lead
-				lead.setDetail(detail);
+			//setting new detail to retrieved lead
+			lead.setDetail(detail);
 				
-				//commiting in database
-				leadRepo.save(lead);
-				return lead;
+			//commiting in database
+			leadRepo.save(lead);
+			return lead;
 		}
 	
 	
@@ -122,6 +128,8 @@ public class LeadController {
 	@PostMapping("/leads/{id}/notes")
 	private Lead addNoteToLead(@PathVariable int id, @RequestBody Note note) {
 		Lead lead = retrieveLead(id);
+		
+		note.setIssueDate(LocalDate.now());
 		
 		lead.addNote(note);
 

@@ -17,6 +17,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
+
 
 @Entity
 @Table(name = "main")
@@ -47,11 +50,12 @@ public class Lead {
 	@Column(name = "field")
 	private String field;
 	
+	@DateTimeFormat(iso = ISO.DATE)
 	@Column(name = "date_arrival")
-	private LocalDate dateArrival = LocalDate.now();
+	private LocalDate dateArrival;
 	
 	@Column(name = "last_touched")
-	private LocalDate lastTouched = LocalDate.now();
+	private LocalDate lastTouched;
 	
 	//all notes should be 100% under Lead
 	@OneToMany(cascade = CascadeType.ALL)
