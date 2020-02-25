@@ -43,7 +43,7 @@ public class LeadController {
 	//METHODS FOR LEAD AND DETAIL --------------------------------------------------------------
 	
 	
-	//getting lead by id
+	//getting lead by id asc
 	@GetMapping(path = "/leads", params = "order=desc")
 	private List<Lead> getAllLeadsDesc() {
 	System.out.println(LocalDate.now());	
@@ -51,6 +51,7 @@ public class LeadController {
 		return leadRepo.findAllByOrderByLastTouchedDesc();
 	}
 	
+	//getting lead by id desc
 	@GetMapping(path = "/leads", params = "order=asc")
 	private List<Lead> getAllLeadsAsc() {
 	System.out.println(LocalDate.now());	
