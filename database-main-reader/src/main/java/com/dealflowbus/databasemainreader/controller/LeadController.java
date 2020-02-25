@@ -2,9 +2,6 @@ package com.dealflowbus.databasemainreader.controller;
 
 import java.net.URI;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -23,6 +21,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.dealflowbus.databasemainreader.entities.Detail;
 import com.dealflowbus.databasemainreader.entities.Lead;
 import com.dealflowbus.databasemainreader.entities.Note;
+import com.dealflowbus.databasemainreader.exceptions.LeadNotFoundException;
+import com.dealflowbus.databasemainreader.exceptions.NoteNotFoundException;
 import com.dealflowbus.databasemainreader.repository.LeadRepository;
 import com.dealflowbus.databasemainreader.repository.NoteRepository;
 
@@ -80,6 +80,16 @@ public class LeadController {
 		return responseEntity;
 	}
 	
+	@PatchMapping("/leads")
+	private Lead updateLead(@RequestBody Lead lead) {
+		lead.setLastTouched(LocalDate.now());
+		LocalDate arrival = retrieveLead(lead.getId()).getDateArrival();
+		lead.setDateArrival(arrival);
+		leadRepo.save(lead);
+		
+		return lead;
+	}
+	
 	
 	//updating Lead with detail infromation
 		@PutMapping("/leads/{id}/details")
@@ -124,6 +134,17 @@ public class LeadController {
 	
 	//METHODS FOR NOTES --------------------------------------------------------------
 	
+	
+	//get list of lead notes
+	@GetMapping("/leads/{id}/notes")
+	private List<Note> getListOfLeadNotes(@PathVariable int id) {
+		
+		Lead lead = retrieveLead(id);
+		
+		return lead.getNotes();
+	}
+
+	
 	//posting new note
 	@PostMapping("/leads/{id}/notes")
 	private Lead addNoteToLead(@PathVariable int id, @RequestBody Note note) {
@@ -144,7 +165,7 @@ public class LeadController {
 		
 		//checking if note with such id exist
 		if (!noteRepo.existsById(noteId)) {
-			//throw new NoteNotFoundException
+			throw new NoteNotFoundException("Note with id: " + id + " dont exist");
 		}
 		
 		noteRepo.deleteById(noteId);
@@ -163,7 +184,7 @@ public class LeadController {
 		Optional<Lead> findById = leadRepo.findById(id);
 		
 		if (!findById.isPresent()) {
-			//throw new UserNotFoundException
+			throw new LeadNotFoundException("Lead with id: " + id + " dont exist");
 		}
 			//retrieving lead
 			Lead lead = findById.get();
