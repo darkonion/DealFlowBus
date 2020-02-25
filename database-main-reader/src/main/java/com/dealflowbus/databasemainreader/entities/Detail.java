@@ -18,10 +18,10 @@ public class Detail {
 	private int descId;
 	
 	@Column(name = "description")
-	private String description;
+	private String description ="";
 	
 	@Column(name = "content")
-	private String content;
+	private String content = "";
 	
 	@OneToOne(mappedBy = "detail")
 	private Lead lead;

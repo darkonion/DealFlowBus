@@ -1,6 +1,9 @@
 package com.dealflowbus.databasemainreader.entities;
 
+
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -10,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -48,8 +52,14 @@ public class Lead {
 	
 	@Column(name = "last_touched")
 	private LocalDate lastTouched = LocalDate.now();
+	
+	//all notes should be 100% under Lead
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "lead_id")
+	private List<Note> notes;
 
 	public Lead() {
+		
 	}
 
 	public Lead(String projectName, String projectOwner,
@@ -61,7 +71,6 @@ public class Lead {
 		this.rejected = false;
 		this.detail = new Detail();
 		this.field = field;
-		this.lastTouched = LocalDate.now();
 	}
 
 	public int getId() {
@@ -134,6 +143,22 @@ public class Lead {
 
 	public void setLastTouched(LocalDate lastTouched) {
 		this.lastTouched = lastTouched;
+	}
+	
+
+	public List<Note> getNotes() {
+		return notes;
+	}
+
+	public void setNotes(List<Note> notes) {
+		this.notes = notes;
+	}
+	
+	public void addNote(Note note) {
+		if (notes == null) {
+			notes = new ArrayList<Note>();
+		}
+		notes.add(note);
 	}
 
 	@Override
