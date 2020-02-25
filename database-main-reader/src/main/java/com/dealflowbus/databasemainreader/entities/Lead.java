@@ -2,6 +2,7 @@ package com.dealflowbus.databasemainreader.entities;
 
 import java.time.LocalDate;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,12 +13,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "main")
 public class Lead {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -35,10 +35,10 @@ public class Lead {
 	@Column(name = "rejected")
 	private boolean rejected;
 	
-	@JsonIgnore
-	@OneToOne(fetch = FetchType.LAZY)
+	
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name="descr_id")
-	private Details details;
+	private Detail detail;
 	
 	@Column(name = "field")
 	private String field;
@@ -52,14 +52,14 @@ public class Lead {
 	public Lead() {
 	}
 
-	public Lead(String projectName, String projectOwner, Details details,
+	public Lead(String projectName, String projectOwner,
 			String field) {
 		
 		this.projectName = projectName;
 		this.projectOwner = projectOwner;
 		this.inProgress = false;
 		this.rejected = false;
-		this.details = details;
+		this.detail = new Detail();
 		this.field = field;
 		this.lastTouched = LocalDate.now();
 	}
@@ -104,12 +104,12 @@ public class Lead {
 		this.rejected = rejected;
 	}
 
-	public Details getDetails() {
-		return details;
+	public Detail getDetail() {
+		return detail;
 	}
 
-	public void setDetails(Details details) {
-		this.details = details;
+	public void setDetail(Detail detail) {
+		this.detail = detail;
 	}
 
 	public String getField() {
@@ -139,7 +139,7 @@ public class Lead {
 	@Override
 	public String toString() {
 		return "Lead [id=" + id + ", projectName=" + projectName + ", projectOwner=" + projectOwner + ", inProgress="
-				+ inProgress + ", rejected=" + rejected + ", details=" + details + ", field=" + field + ", dateArrival="
+				+ inProgress + ", rejected=" + rejected + ", detail=" + detail + ", field=" + field + ", dateArrival="
 				+ dateArrival + ", lastTouched=" + lastTouched + "]";
 	}
 	
