@@ -44,10 +44,18 @@ public class LeadController {
 	
 	
 	//getting lead by id
-	@GetMapping("/leads")
-	private List<Lead> getAllLeads() {
+	@GetMapping(path = "/leads", params = "order=desc")
+	private List<Lead> getAllLeadsDesc() {
 	System.out.println(LocalDate.now());	
-		return leadRepo.findAll();
+
+		return leadRepo.findAllByOrderByLastTouchedDesc();
+	}
+	
+	@GetMapping(path = "/leads", params = "order=asc")
+	private List<Lead> getAllLeadsAsc() {
+	System.out.println(LocalDate.now());	
+
+		return leadRepo.findAllByOrderByLastTouchedAsc();
 	}
 	
 	
