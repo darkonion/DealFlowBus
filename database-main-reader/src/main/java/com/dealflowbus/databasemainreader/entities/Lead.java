@@ -42,6 +42,8 @@ public class Lead {
 	@Column(name = "rejected")
 	private boolean rejected;
 	
+	@Column(name = "in_portfolio")
+	private boolean inPortfolio;	
 	
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name="descr_id")
@@ -73,6 +75,7 @@ public class Lead {
 		this.projectOwner = projectOwner;
 		this.inProgress = false;
 		this.rejected = false;
+		this.inPortfolio= false;
 		this.detail = new Detail();
 		this.field = field;
 	}
@@ -163,6 +166,14 @@ public class Lead {
 			notes = new ArrayList<Note>();
 		}
 		notes.add(note);
+	}
+
+	public boolean isInPortfolio() {
+		return inPortfolio;
+	}
+
+	public void setInPortfolio(boolean inPortfolio) {
+		this.inPortfolio = inPortfolio;
 	}
 
 	@Override
