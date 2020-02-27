@@ -4,15 +4,15 @@ import java.util.Date;
 
 public class ExceptionResponder {
 	private Date timestamp;
-	private String massage;
+	private String message;
 	private String details;
 	
 	public ExceptionResponder() {
 	}
 
-	public ExceptionResponder(Date timestamp, String massage, String details) {
+	public ExceptionResponder(Date timestamp, String message, String details) {
 		this.timestamp = timestamp;
-		this.massage = massage;
+		this.message = message;
 		this.details = details;
 	}
 
@@ -24,12 +24,12 @@ public class ExceptionResponder {
 		this.timestamp = timestamp;
 	}
 
-	public String getMassage() {
-		return massage;
+	public String getMessage() {
+		return message;
 	}
 
-	public void setMassage(String massage) {
-		this.massage = massage;
+	public void setMessage(String massage) {
+		this.message = massage;
 	}
 
 	public String getDetails() {

@@ -12,13 +12,14 @@ public class Lead {
 	private String field;
 	private LocalDate dateArrival;
 	private LocalDate lastTouched;
+	private boolean inPortfolio;
 
 	public Lead() {
 		
 	}
 	
 	public Lead(int id, String projectName, String projectOwner, boolean inProgress, boolean rejected, String field,
-			LocalDate dateArrival, LocalDate lastTouched) {
+			LocalDate dateArrival, LocalDate lastTouched, boolean inPortfolio) {
 		this.id = id;
 		this.projectName = projectName;
 		this.projectOwner = projectOwner;
@@ -27,6 +28,7 @@ public class Lead {
 		this.field = field;
 		this.dateArrival = dateArrival;
 		this.lastTouched = lastTouched;
+		this.inPortfolio = inPortfolio;
 	}
 
 	public int getId() {
@@ -92,6 +94,16 @@ public class Lead {
 	public void setLastTouched(LocalDate lastTouched) {
 		this.lastTouched = lastTouched;
 	}
+
+	public boolean isInPortfolio() {
+		return inPortfolio;
+	}
+
+	public void setInPortfolio(boolean inPortfolio) {
+		this.inPortfolio = inPortfolio;
+	}
+	
+	
 	
 	
 	

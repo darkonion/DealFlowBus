@@ -50,18 +50,11 @@ public class LeadController {
 	//METHODS FOR LEAD AND DETAIL --------------------------------------------------------------
 	
 	
-	//getting lead list asc
-	@GetMapping(path = "/leads", params = "order=desc")
+	//getting full lead list asc
+	@GetMapping(path = "/leadscrude")
 	private List<Lead> getAllLeadsDesc() {	
 
 		return leadRepo.findAllByOrderByLastTouchedDesc();
-	}
-	
-	//getting lead list desc
-	@GetMapping(path = "/leads", params = "order=asc")
-	private List<Lead> getAllLeadsAsc() {
-
-		return leadRepo.findAllByOrderByLastTouchedAsc();
 	}
 	
 	//getting search results
@@ -73,8 +66,8 @@ public class LeadController {
 	
 	//getting leads with customizable filtering
 	@GetMapping(path = "/leads")
-	private Page<Lead> getAllLeadsPageDesc(@RequestParam(value = "l") int limit,
-											@RequestParam(value = "p") int page,
+	private Page<Lead> getAllLeadsPageDesc(@RequestParam(value = "l", defaultValue = "10") int limit,
+											@RequestParam(value = "p", defaultValue = "0") int page,
 											@RequestParam(value = "filter", required = false) int filter,
 											@RequestParam(value = "invorder", required = false) boolean invorder) {	
 		
@@ -100,25 +93,9 @@ public class LeadController {
 				//maybe it is worth to hardcode here Hystrix formula
 				throw new WrongHTTPQueryFormula("Mapping parameters were wrong");
 		}
-			
-			
+
 	}
-		
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	//getting lead by id
 	@GetMapping("/leads/{id}")
 	private Lead getLead(@PathVariable int id) {
@@ -148,7 +125,7 @@ public class LeadController {
 		return responseEntity;
 	}
 	
-	@PatchMapping("/leads")
+	@PutMapping("/leads")
 	private Lead updateLead(@RequestBody Lead lead) {
 		lead.setLastTouched(LocalDate.now());
 		LocalDate arrival = retrieveLead(lead.getId()).getDateArrival();

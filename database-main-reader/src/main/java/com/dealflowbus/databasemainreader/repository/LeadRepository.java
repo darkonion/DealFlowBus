@@ -18,6 +18,7 @@ public interface LeadRepository extends JpaRepository<Lead, Integer> {
 	
 	// MUST HAVE FOR STATISTICS -------------------------------
 	List<Lead> findAllByOrderByLastTouchedAsc();
+	
 	List<Lead> findAllByOrderByLastTouchedDesc();
 	//---------------------------------------------------------
 	
