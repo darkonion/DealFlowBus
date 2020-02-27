@@ -1,11 +1,16 @@
 package com.dealflowbus.databasemainreader.controller;
 
+
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -23,6 +29,7 @@ import com.dealflowbus.databasemainreader.entities.Lead;
 import com.dealflowbus.databasemainreader.entities.Note;
 import com.dealflowbus.databasemainreader.exceptions.LeadNotFoundException;
 import com.dealflowbus.databasemainreader.exceptions.NoteNotFoundException;
+import com.dealflowbus.databasemainreader.exceptions.WrongHTTPQueryFormula;
 import com.dealflowbus.databasemainreader.repository.LeadRepository;
 import com.dealflowbus.databasemainreader.repository.NoteRepository;
 
@@ -43,24 +50,76 @@ public class LeadController {
 	//METHODS FOR LEAD AND DETAIL --------------------------------------------------------------
 	
 	
-	//getting lead by id asc
+	//getting lead list asc
 	@GetMapping(path = "/leads", params = "order=desc")
-	private List<Lead> getAllLeadsDesc() {
-	System.out.println(LocalDate.now());	
+	private List<Lead> getAllLeadsDesc() {	
 
 		return leadRepo.findAllByOrderByLastTouchedDesc();
 	}
 	
-	//getting lead by id desc
+	//getting lead list desc
 	@GetMapping(path = "/leads", params = "order=asc")
 	private List<Lead> getAllLeadsAsc() {
-	System.out.println(LocalDate.now());	
 
 		return leadRepo.findAllByOrderByLastTouchedAsc();
 	}
 	
+	//getting search results
+	@GetMapping(path = "/lsearch")
+	private List<Lead> querySearch(@RequestParam(value = "query") String query) {	
+
+		return leadRepo.querySearch(query);
+	}
 	
-	//getting lead list
+	//getting leads with customizable filtering
+	@GetMapping(path = "/leads")
+	private Page<Lead> getAllLeadsPageDesc(@RequestParam(value = "l") int limit,
+											@RequestParam(value = "p") int page,
+											@RequestParam(value = "filter", required = false) int filter,
+											@RequestParam(value = "invorder", required = false) boolean invorder) {	
+		
+		Pageable pageable;	
+		
+		if (!invorder) {
+			pageable = PageRequest.of(page, limit, Sort.by("lastTouched").descending());
+		} else {
+			pageable = PageRequest.of(page, limit, Sort.by("lastTouched").ascending());
+		}
+		
+		if (filter == 1) {
+			return leadRepo.findAllKicked(pageable);
+		} else if (filter == 2) {
+			return leadRepo.findAllInPortfolio(pageable);
+		} else if (filter == 3) {
+			return leadRepo.findAllInProgress(pageable);
+		} else if (filter == 4) {
+			return leadRepo.findAllActiveLeads(pageable);
+		} else if (filter == 5) {
+			return leadRepo.findAll(pageable);
+		} else {
+				//maybe it is worth to hardcode here Hystrix formula
+				throw new WrongHTTPQueryFormula("Mapping parameters were wrong");
+		}
+			
+			
+	}
+		
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	//getting lead by id
 	@GetMapping("/leads/{id}")
 	private Lead getLead(@PathVariable int id) {
 	System.out.println(LocalDate.now());	

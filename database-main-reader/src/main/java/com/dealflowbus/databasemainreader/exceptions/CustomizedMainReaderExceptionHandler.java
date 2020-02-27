@@ -39,4 +39,12 @@ public class CustomizedMainReaderExceptionHandler extends ResponseEntityExceptio
 		
 		return new ResponseEntity<Object>(exceptionResponse, HttpStatus.NOT_FOUND);
 	}
+	
+	@ExceptionHandler(WrongHTTPQueryFormula.class)
+	public final ResponseEntity<Object> handleWrongHTTPQuery(WrongHTTPQueryFormula ex, WebRequest request) {
+		
+		ExceptionResponder exceptionResponse = new ExceptionResponder(new Date(), ex.getMessage(), request.getDescription(false));
+		
+		return new ResponseEntity<Object>(exceptionResponse, HttpStatus.BAD_REQUEST);
+	}
 }
