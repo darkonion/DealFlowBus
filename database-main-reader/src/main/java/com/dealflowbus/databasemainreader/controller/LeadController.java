@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,7 +15,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -26,16 +26,19 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.dealflowbus.databasemainreader.entities.Detail;
 import com.dealflowbus.databasemainreader.entities.Lead;
+import com.dealflowbus.databasemainreader.entities.LeadViews;
 import com.dealflowbus.databasemainreader.entities.Note;
 import com.dealflowbus.databasemainreader.exceptions.LeadNotFoundException;
 import com.dealflowbus.databasemainreader.exceptions.NoteNotFoundException;
 import com.dealflowbus.databasemainreader.exceptions.WrongHTTPQueryFormula;
 import com.dealflowbus.databasemainreader.repository.LeadRepository;
 import com.dealflowbus.databasemainreader.repository.NoteRepository;
+import com.fasterxml.jackson.annotation.JsonView;
 
 @RestController
 @RequestMapping("/api")
 public class LeadController {
+
 
 	@Autowired
 	private LeadRepository leadRepo;
@@ -44,13 +47,12 @@ public class LeadController {
 	private NoteRepository noteRepo;
 	
 
-	
-	
-	
+
 	//METHODS FOR LEAD AND DETAIL --------------------------------------------------------------
 	
 	
 	//getting full lead list asc
+	@JsonView(LeadViews.Base.class)
 	@GetMapping(path = "/leadscrude")
 	private List<Lead> getAllLeadsDesc() {	
 
@@ -58,6 +60,7 @@ public class LeadController {
 	}
 	
 	//getting search results
+	@JsonView(LeadViews.List.class)
 	@GetMapping(path = "/lsearch")
 	private List<Lead> querySearch(@RequestParam(value = "query") String query) {	
 
@@ -65,6 +68,7 @@ public class LeadController {
 	}
 	
 	//getting leads with customizable filtering
+	@JsonView(LeadViews.List.class)
 	@GetMapping(path = "/leads")
 	private Page<Lead> getAllLeadsPageDesc(@RequestParam(value = "l", defaultValue = "10") int limit,
 											@RequestParam(value = "p", defaultValue = "0") int page,

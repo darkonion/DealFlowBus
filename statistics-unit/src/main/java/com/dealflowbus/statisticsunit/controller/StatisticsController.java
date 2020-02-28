@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dealflowbus.statisticsunit.feign.LeadFeignClient;
 import com.dealflowbus.statisticsunit.models.Lead;
+import com.dealflowbus.statisticsunit.models.Note;
 import com.dealflowbus.statisticsunit.statistics.MainEngine;
 
 
@@ -42,6 +43,12 @@ public class StatisticsController {
 		} else {
 			throw new RuntimeException("Wrong mapping param");
 		}
+		
+	}
+	
+	@GetMapping("/notes")
+	private List<Note> getNotes() {
+		return lfc.getNotes(1);
 		
 	}
 	

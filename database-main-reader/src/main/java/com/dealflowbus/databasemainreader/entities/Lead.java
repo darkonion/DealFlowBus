@@ -21,45 +21,59 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 
+import com.fasterxml.jackson.annotation.JsonView;
+
+
 @Entity
 @Table(name = "main")
 public class Lead {
+
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private int id;
 	
+	@JsonView(LeadViews.List.class)
 	@Column(name = "project_name")
 	private String projectName;
 	
+	@JsonView(LeadViews.List.class)
 	@Column(name = "project_owner")
 	private String projectOwner;
 	
+	@JsonView(LeadViews.Base.class)
 	@Column(name = "in_progress")
 	private boolean inProgress;
 	
+	@JsonView(LeadViews.Base.class)
 	@Column(name = "rejected")
 	private boolean rejected;
 	
+	@JsonView(LeadViews.Base.class)
 	@Column(name = "in_portfolio")
 	private boolean inPortfolio;	
 	
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	//@JsonIgnore
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name="descr_id")
 	private Detail detail;
 	
+	@JsonView(LeadViews.Base.class)
 	@Column(name = "field")
 	private String field;
 	
+	@JsonView(LeadViews.Base.class)
 	@DateTimeFormat(iso = ISO.DATE)
 	@Column(name = "date_arrival")
 	private LocalDate dateArrival;
 	
+	@JsonView(LeadViews.Base.class)
 	@Column(name = "last_touched")
 	private LocalDate lastTouched;
 	
 	//all notes should be 100% under Lead
+	//@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "lead_id")
 	private List<Note> notes;
@@ -176,12 +190,7 @@ public class Lead {
 		this.inPortfolio = inPortfolio;
 	}
 
-	@Override
-	public String toString() {
-		return "Lead [id=" + id + ", projectName=" + projectName + ", projectOwner=" + projectOwner + ", inProgress="
-				+ inProgress + ", rejected=" + rejected + ", detail=" + detail + ", field=" + field + ", dateArrival="
-				+ dateArrival + ", lastTouched=" + lastTouched + "]";
-	}
+	
 	
 	
 	

@@ -2,6 +2,7 @@ package com.dealflowbus.databasemainreader.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -23,7 +24,7 @@ public class Detail {
 	@Column(name = "content")
 	private String content = "";
 	
-	@OneToOne(mappedBy = "detail")
+	@OneToOne(mappedBy = "detail", fetch = FetchType.LAZY)
 	private Lead lead;
 
 	public Detail() {
