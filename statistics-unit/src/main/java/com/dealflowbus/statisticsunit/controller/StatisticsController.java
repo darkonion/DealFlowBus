@@ -40,16 +40,20 @@ public class StatisticsController {
 			return MainEngine.getCountInProgress(list);
 		} else if (countType == 5) {
 			return MainEngine.getCountForgotten(list);
+		} else if (countType == 6) {
+			return MainEngine.getCountAddedInThisMonth(list);
+		} else if (countType == 7) {
+			return MainEngine.getCountAddedInThisYear(list);
 		} else {
 			throw new RuntimeException("Wrong mapping param");
 		}
 		
 	}
 	
-	@GetMapping("/notes")
-	private List<Note> getNotes() {
-		return lfc.getNotes(1);
-		
+	
+	@GetMapping("/trends")
+	private boolean getTrend() {
+		return MainEngine.tendencyRising(list);
 	}
 	
 	

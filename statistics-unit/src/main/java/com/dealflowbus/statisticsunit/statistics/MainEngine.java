@@ -3,6 +3,8 @@ package com.dealflowbus.statisticsunit.statistics;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.boot.autoconfigure.web.servlet.WebMvcProperties.LocaleResolver;
+
 import com.dealflowbus.statisticsunit.models.Lead;
 
 public class MainEngine {
@@ -65,6 +67,50 @@ public class MainEngine {
 		return count;
 	}
 	
+	public static int getCountAddedInThisYear(List<Lead> leads) {
+		int count = 0;
+		
+		for (Lead n : leads) {
+			if (n.getDateArrival().getYear() == LocalDate.now().getYear()) {
+				count ++;
+			}
+		}
+		return count;
+	}
+	
+	public static int getCountAddedInThisMonth(List<Lead> leads) {
+		int count = 0;
+		
+		for (Lead n : leads) {
+			if (n.getDateArrival().getMonth() == LocalDate.now().getMonth()) {
+				count ++;
+			}
+		}
+		return count;
+	}
+	
+	public static boolean tendencyRising(List<Lead> leads) {
+		int countLastMonth = 0;
+		int countTwoMonthsAgo = 0;
+		for (Lead n : leads) {
+			if (n.getDateArrival().getMonth() == LocalDate.now().getMonth().minus(1)) {
+				countLastMonth++;
+			}
+			if (n.getDateArrival().getMonth() == LocalDate.now().getMonth().minus(2)) {
+				countTwoMonthsAgo++;
+			}
+	
+		}
+		if (countLastMonth > countTwoMonthsAgo) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 	
 	
 }
+
+
+
+
