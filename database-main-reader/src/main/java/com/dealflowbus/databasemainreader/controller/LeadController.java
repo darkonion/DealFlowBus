@@ -45,7 +45,6 @@ public class LeadController {
 	
 	@Autowired
 	private NoteRepository noteRepo;
-	
 
 
 	//METHODS FOR LEAD AND DETAIL --------------------------------------------------------------
@@ -59,6 +58,7 @@ public class LeadController {
 		return leadRepo.findAllByOrderByLastTouchedDesc();
 	}
 	
+	
 	//getting search results
 	@JsonView(LeadViews.List.class)
 	@GetMapping(path = "/lsearch")
@@ -66,6 +66,7 @@ public class LeadController {
 
 		return leadRepo.querySearch(query);
 	}
+	
 	
 	//getting leads with customizable filtering
 	@JsonView(LeadViews.List.class)
@@ -99,11 +100,11 @@ public class LeadController {
 		}
 
 	}
-
+	
+	
 	//getting lead by id
 	@GetMapping("/leads/{id}")
 	private Lead getLead(@PathVariable int id) {
-	System.out.println(LocalDate.now());	
 		Lead lead = retrieveLead(id);
 		
 		return lead;
@@ -129,6 +130,26 @@ public class LeadController {
 		return responseEntity;
 	}
 	
+	
+	//deleting lead
+	@DeleteMapping("/leads/{id}")
+	private String deleteLead(@PathVariable int id) {
+			
+		//checking if lead with such id exists
+		boolean existsById = leadRepo.existsById(id);
+		
+		if(!existsById) {
+				throw new LeadNotFoundException("Lead with id: " + id + " dont exist");
+		}
+			
+		//deleting
+		leadRepo.deleteById(id);
+
+		return "Lead with id - "+id+" was removed from system";
+	}
+
+	
+	//to fix
 	@PutMapping("/leads")
 	private Lead updateLead(@RequestBody Lead lead) {
 		lead.setLastTouched(LocalDate.now());
@@ -141,41 +162,38 @@ public class LeadController {
 	
 	
 	//updating Lead with detail infromation
-		@PutMapping("/leads/{id}/details")
-		private Lead addDescr(@PathVariable int id, @RequestBody Detail detail) {
+	@PutMapping("/leads/{id}/details")
+	private Lead addDescr(@PathVariable int id, @RequestBody Detail detail) {
 			
-			Lead lead = retrieveLead(id);
-				
-			//retrieving current lead detail id
-			int tempId = lead.getDetail().getDescId();
+		Lead lead = retrieveLead(id);
 			
-			//assigning current lead detail to new detail
-			detail.setDescId(tempId);
+		//updating last touched of lead
+		lead.setLastTouched(LocalDate.now());	
+			
+		//retrieving current lead detail id
+		int tempId = lead.getDetail().getDescId();
+			
+		//assigning current lead detail to new detail
+		detail.setDescId(tempId);
+			
+		//setting new detail to retrieved lead
+		lead.setDetail(detail);
 				
-			//setting new detail to retrieved lead
-			lead.setDetail(detail);
-				
-			//commiting in database
-			leadRepo.save(lead);
-			return lead;
-		}
-	
-	
-	//deleting lead
-	@DeleteMapping("/leads/{id}")
-	private String deleteLead(@PathVariable int id) {
-		
-		boolean existsById = leadRepo.existsById(id);
-		
-		if(!existsById) {
-			//throw new UserNotFoundException
-		}
-		
-		leadRepo.deleteById(id);
-
-		return "Lead with id - "+id+" was removed from system";
+		//commiting in database
+		leadRepo.save(lead);
+		return lead;
 	}
-
+	
+	
+	//getting details by id
+		@GetMapping("/leads/{id}/details")
+		private Detail getDetail(@PathVariable int id) {
+			Lead lead = retrieveLead(id);
+			return lead.getDetail();
+		}
+	
+	
+	
 	
 	
 	
@@ -198,7 +216,7 @@ public class LeadController {
 	@PostMapping("/leads/{id}/notes")
 	private Lead addNoteToLead(@PathVariable int id, @RequestBody Note note) {
 		Lead lead = retrieveLead(id);
-		
+		lead.setLastTouched(LocalDate.now());
 		note.setIssueDate(LocalDate.now());
 		
 		lead.addNote(note);
@@ -207,6 +225,7 @@ public class LeadController {
 		
 		return lead;
 	}
+	
 	
 	//deleting note by id
 	@DeleteMapping("/leads/{id}/notes/{noteId}")
@@ -228,6 +247,7 @@ public class LeadController {
 	
 	
 	//HELPER METHODS --------------------------------------------------------------
+	
 	
 	private Lead retrieveLead(int id) {
 		Optional<Lead> findById = leadRepo.findById(id);

@@ -17,13 +17,15 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.LazyToOne;
+import org.hibernate.annotations.LazyToOneOption;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
-
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonView;
 
-
+@JsonIgnoreProperties("hibernateLazyInitializer")
 @Entity
 @Table(name = "main")
 public class Lead {
@@ -54,7 +56,7 @@ public class Lead {
 	@Column(name = "in_portfolio")
 	private boolean inPortfolio;	
 	
-	//@JsonIgnore
+	//@LazyToOne(value = LazyToOneOption.NO_PROXY)
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name="descr_id")
 	private Detail detail;
