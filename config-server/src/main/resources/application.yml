@@ -4,7 +4,11 @@ spring:
         server:
           git:
             uri: https://github.com/darkonion/DealFlowBus.git
-            searchPaths: security/config*
+            default-label: security
+            search-paths:            - config
+            username: darkonion
+            password: Ovarkills11
+                      
     application:      name: config-server
       security:      user:        password: ovarkills11
       
