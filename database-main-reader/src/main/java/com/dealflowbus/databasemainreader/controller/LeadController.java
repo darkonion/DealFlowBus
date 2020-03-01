@@ -39,7 +39,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 @RequestMapping("/api")
 public class LeadController {
 
-//elo
+//elo2
 	@Autowired
 	private LeadRepository leadRepo;
 	
