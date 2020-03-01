@@ -1,2 +1,9 @@
 server:
   port: 8081
+  
+  
+spring:
+  datasource:
+    url: jdbc:mysql://serwer2088490.home.pl:3306/32169580_dealflowmain?useSSL=false&serverTimezone=UTC
+    username: 32169580_dealflowmain
+    password: ovarkills11
