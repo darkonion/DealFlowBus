@@ -16,9 +16,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
-import org.hibernate.annotations.LazyToOne;
-import org.hibernate.annotations.LazyToOneOption;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
@@ -36,13 +36,32 @@ public class Lead {
 	@Column(name = "id")
 	private int id;
 	
+	@NotNull
+	@Size(min = 2, message = "Name should be at least 2 characters long")
+	@Size(max = 40, message = "Too long name, max 40 characters")
 	@JsonView(LeadViews.List.class)
 	@Column(name = "project_name")
 	private String projectName;
 	
+	@NotNull
+	@Size(min = 2, message = "Owner should be at least 2 characters long")
+	@Size(max = 40, message = "Too long name of Owner, max 40 characters")
 	@JsonView(LeadViews.List.class)
 	@Column(name = "project_owner")
 	private String projectOwner;
+	
+	@JsonView(LeadViews.Base.class)
+	@Column(name = "field")
+	private String field;
+	
+	@NotNull
+	@JsonView(LeadViews.List.class)
+	@Column(name = "email")
+	private String email;
+	
+	@JsonView(LeadViews.List.class)
+	@Column(name = "extra_address")
+	private String extraAddress;
 	
 	@JsonView(LeadViews.Base.class)
 	@Column(name = "in_progress")
@@ -56,14 +75,9 @@ public class Lead {
 	@Column(name = "in_portfolio")
 	private boolean inPortfolio;	
 	
-	//@LazyToOne(value = LazyToOneOption.NO_PROXY)
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name="descr_id")
 	private Detail detail;
-	
-	@JsonView(LeadViews.Base.class)
-	@Column(name = "field")
-	private String field;
 	
 	@JsonView(LeadViews.Base.class)
 	@DateTimeFormat(iso = ISO.DATE)
@@ -74,8 +88,6 @@ public class Lead {
 	@Column(name = "last_touched")
 	private LocalDate lastTouched;
 	
-	//all notes should be 100% under Lead
-	//@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "lead_id")
 	private List<Note> notes;
@@ -85,7 +97,7 @@ public class Lead {
 	}
 
 	public Lead(String projectName, String projectOwner,
-			String field) {
+			String field, String email, String extraAddress) {
 		
 		this.projectName = projectName;
 		this.projectOwner = projectOwner;
@@ -94,6 +106,10 @@ public class Lead {
 		this.inPortfolio= false;
 		this.detail = new Detail();
 		this.field = field;
+		this.email = email;
+		this.extraAddress = extraAddress;
+		
+		
 	}
 
 	public int getId() {
@@ -192,10 +208,22 @@ public class Lead {
 		this.inPortfolio = inPortfolio;
 	}
 
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getExtraAddress() {
+		return extraAddress;
+	}
+
+	public void setExtraAddress(String extraAddress) {
+		this.extraAddress = extraAddress;
+	}
 	
-	
-	
-	
-	
+
 
 }

@@ -71,7 +71,7 @@ public class LeadController {
 	//getting leads with customizable filtering
 	@JsonView(LeadViews.List.class)
 	@GetMapping(path = "/leads")
-	private Page<Lead> getAllLeadsPageDesc(@RequestParam(value = "l", defaultValue = "10") int limit,
+	private Page<Lead> getAllLeadsPageDesc(@RequestParam(value = "l", defaultValue = "15") int limit,
 											@RequestParam(value = "p", defaultValue = "0") int page,
 											@RequestParam(value = "filter", required = false, defaultValue = "4") int filter,
 											@RequestParam(value = "invorder", required = false) boolean invorder) {	
