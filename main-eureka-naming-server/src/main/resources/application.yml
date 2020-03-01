@@ -1,0 +1,18 @@
+spring:
+  appication:
+    name: main-eureka-naming-server
+  cloud:
+    config: 
+      uri: http://localhost:8888
+      fail-fast: true
+      password: ovarkills11
+      username: user
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+  
+ 
