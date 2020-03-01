@@ -1,7 +1,2 @@
-<<<<<<< HEAD
-server:
-  port: 8761
-=======
 server:
   port: 8761 
->>>>>>> 372cbd69f476f0c2a53133bb070c2ccdebc1e936
