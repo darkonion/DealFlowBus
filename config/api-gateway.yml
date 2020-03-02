@@ -4,3 +4,11 @@ server:
   
 ribbon:
   timeout: 100000
+  
+security:
+  oauth2:
+    resource:
+      token-info-uri: http://localhost:9191/oauth/check_token
+    client:
+      client-id: webgui
+      client-secret: ovarkills11
