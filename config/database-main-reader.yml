@@ -7,7 +7,7 @@ spring:
     url: jdbc:mysql://serwer2088490.home.pl:3306/32169580_dealflowmain?useSSL=false&serverTimezone=UTC
     username: 32169580_dealflowmain
     password: ovarkills11
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: com.mysql.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: update
