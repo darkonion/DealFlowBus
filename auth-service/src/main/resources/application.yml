@@ -1,0 +1,32 @@
+server:
+  port: 9191
+
+spring:
+  application:
+    name: auth-service
+    
+
+  datasource:
+    url: jdbc:mysql://darkonion.atthost24.pl:3306/13936_dfauth?createDatabaseIfNotExist=true&serverTimezone=UTC&useSSL=false
+    username: 13936_dfauth
+    password: ovarkills11
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    initialization-mode: always
+  jpa:
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+
+logging:
+  level:
+    org: 
+      hibernate:
+        type: trace
+      
+  
+         
+
