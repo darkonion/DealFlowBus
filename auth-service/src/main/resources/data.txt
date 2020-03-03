@@ -7,19 +7,31 @@ INSERT INTO oauth_client_details (client_id, client_secret, web_server_redirect_
  ('delete_profile');
 
  INSERT INTO role (NAME) VALUES
-		('ROLE_admin'),('ROLE_operator');
+		('ROLE_admin'),('ROLE_editor'),('ROLE_operator');
 
  INSERT INTO permission_role (PERMISSION_ID, ROLE_ID) VALUES
      (1,1), /*create-> admin */
      (2,1), /* read admin */
      (3,1), /* update admin */
      (4,1), /* delete admin */
-     (2,2),  /* read operator */
-     (3,2);  /* update operator */
-insert into user (id, username,password, email, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked) VALUES ('1', 'Recon','{bcrypt}$2y$12$vvPFcrCafft1iSmlgnbazuh.KE/1CxNFiy3WVbejz7gX9DSuuYKoi', 'pawkapl89@gmail.com', '1', '1', '1', '1');
- insert into  user (id, username,password, email, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked) VALUES ('2', 'testuser', '{bcrypt}$2y$12$CP8fq9utNk4i8iFlfZOfkuiELrgVvh.UOjBGOncPtUKpYEr9UC9Xi','pawkapl@gazeta.pl', '1', '1', '1', '1');
+     (2,2),  /* read Editor */
+     (3,2),  /* update Editor */
+     (2,3);  /* read operator */
 
-INSERT INTO role_user (ROLE_ID, USER_ID)
+
+insert into user (id, username,password, email, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked) VALUES ('1', 'Recon','{bcrypt}$2y$12$vvPFcrCafft1iSmlgnbazuh.KE/1CxNFiy3WVbejz7gX9DSuuYKoi', 'pawkapl89@gmail.com', '1', '1', '1', '1');
+insert into  user (id, username,password, email, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked) VALUES ('2', 'testuser', '{bcrypt}$2y$12$CP8fq9utNk4i8iFlfZOfkuiELrgVvh.UOjBGOncPtUKpYEr9UC9Xi','pawkapl@gazeta.pl', '1', '1', '1', '1');
+insert into  user (id, username,password, email, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked) VALUES ('3', 'testuser2', '{bcrypt}$2y$12$CP8fq9utNk4i8iFlfZOfkuiELrgVvh.UOjBGOncPtUKpYEr9UC9Xi','k@krishantha.com', '1', '1', '1', '1');
+ /*
+ passowrds:
+ krish - kpass
+ suranga - spass
+ nuwan - spass
+ */
+
+
+INSERT INTO role-user (ROLE_ID, USER_ID)
     VALUES
-    (1, 1) /* Recon-admin */,
-    (2, 2) /* TestUser-operatorr */ ;
+    (1, 1) /* krish-admin */,
+    (2, 2) /* suranga-editor */ ,
+    (3, 3) /* nuwan-operatorr */ ;

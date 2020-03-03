@@ -3,6 +3,7 @@ package com.dealflowbus.databasemainreader.controller;
 
 import java.net.URI;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,7 +41,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 @RequestMapping("/api")
 public class LeadController {
 
-//elo2
+
 	@Autowired
 	private LeadRepository leadRepo;
 	
@@ -53,7 +55,8 @@ public class LeadController {
 	//getting full lead list asc
 	@JsonView(LeadViews.Base.class)
 	@GetMapping(path = "/leadscrude")
-	private List<Lead> getAllLeadsDesc() {	
+	@PreAuthorize("hasAuthority('create_profile')")
+	public List<Lead> getAllLeadsDesc() {	
 
 		return leadRepo.findAllByOrderByLastTouchedDesc();
 	}
@@ -62,7 +65,7 @@ public class LeadController {
 	//getting search results
 	@JsonView(LeadViews.List.class)
 	@GetMapping(path = "/lsearch")
-	private List<Lead> querySearch(@RequestParam(value = "query") String query) {	
+	public List<Lead> querySearch(@RequestParam(value = "query") String query) {	
 
 		return leadRepo.querySearch(query);
 	}
@@ -71,7 +74,7 @@ public class LeadController {
 	//getting leads with customizable filtering
 	@JsonView(LeadViews.List.class)
 	@GetMapping(path = "/leads")
-	private Page<Lead> getAllLeadsPageDesc(@RequestParam(value = "l", defaultValue = "15") int limit,
+	public Page<Lead> getAllLeadsPageDesc(@RequestParam(value = "l", defaultValue = "15") int limit,
 											@RequestParam(value = "p", defaultValue = "0") int page,
 											@RequestParam(value = "filter", required = false, defaultValue = "4") int filter,
 											@RequestParam(value = "invorder", required = false) boolean invorder) {	
@@ -104,7 +107,7 @@ public class LeadController {
 	
 	//getting lead by id
 	@GetMapping("/leads/{id}")
-	private Lead getLead(@PathVariable int id) {
+	public Lead getLead(@PathVariable int id) {
 		Lead lead = retrieveLead(id);
 		
 		return lead;
@@ -113,7 +116,7 @@ public class LeadController {
 
 	//Posting new Lead
 	@PostMapping("/leads")
-	private ResponseEntity<Lead> saveLead(@RequestBody Lead lead) {
+	public ResponseEntity<Lead> saveLead(@RequestBody Lead lead) {
 		
 		lead.setDateArrival(LocalDate.now());
 		lead.setLastTouched(LocalDate.now());
@@ -133,7 +136,7 @@ public class LeadController {
 	
 	//deleting lead
 	@DeleteMapping("/leads/{id}")
-	private String deleteLead(@PathVariable int id) {
+	public String deleteLead(@PathVariable int id) {
 			
 		//checking if lead with such id exists
 		boolean existsById = leadRepo.existsById(id);
@@ -151,7 +154,7 @@ public class LeadController {
 	
 	//to fix
 	@PutMapping("/leads")
-	private Lead updateLead(@RequestBody Lead lead) {
+	public Lead updateLead(@RequestBody Lead lead) {
 		lead.setLastTouched(LocalDate.now());
 		LocalDate arrival = retrieveLead(lead.getId()).getDateArrival();
 		lead.setDateArrival(arrival);
@@ -163,7 +166,7 @@ public class LeadController {
 	
 	//updating Lead with detail infromation
 	@PutMapping("/leads/{id}/details")
-	private Lead addDescr(@PathVariable int id, @RequestBody Detail detail) {
+	public Lead addDescr(@PathVariable int id, @RequestBody Detail detail) {
 			
 		Lead lead = retrieveLead(id);
 			
@@ -186,11 +189,11 @@ public class LeadController {
 	
 	
 	//getting details by id
-		@GetMapping("/leads/{id}/details")
-		private Detail getDetail(@PathVariable int id) {
-			Lead lead = retrieveLead(id);
-			return lead.getDetail();
-		}
+	@GetMapping("/leads/{id}/details")
+	public Detail getDetail(@PathVariable int id) {
+		Lead lead = retrieveLead(id);
+		return lead.getDetail();
+	}
 	
 	
 	
@@ -204,7 +207,7 @@ public class LeadController {
 	
 	//get list of lead notes
 	@GetMapping("/leads/{id}/notes")
-	private List<Note> getListOfLeadNotes(@PathVariable int id) {
+	public List<Note> getListOfLeadNotes(@PathVariable int id) {
 		
 		Lead lead = retrieveLead(id);
 		
@@ -214,11 +217,12 @@ public class LeadController {
 	
 	//posting new note
 	@PostMapping("/leads/{id}/notes")
-	private Lead addNoteToLead(@PathVariable int id, @RequestBody Note note) {
+	@PreAuthorize("hasAuthority('create_profile')")
+	public Lead addNoteToLead(@PathVariable int id, @RequestBody Note note) {
 		Lead lead = retrieveLead(id);
 		lead.setLastTouched(LocalDate.now());
 		note.setIssueDate(LocalDate.now());
-		
+			
 		lead.addNote(note);
 
 		leadRepo.save(lead);
@@ -229,7 +233,7 @@ public class LeadController {
 	
 	//deleting note by id
 	@DeleteMapping("/leads/{id}/notes/{noteId}")
-	private String deleteNoteFromLead(@PathVariable int id, @PathVariable int noteId) {
+	public String deleteNoteFromLead(@PathVariable int id, @PathVariable int noteId) {
 		
 		//checking if note with such id exist
 		if (!noteRepo.existsById(noteId)) {

@@ -7,3 +7,7 @@ spring:
       fail-fast: true
       password: ovarkills11
       username: user
+  jpa:    show-sql: true
+
+
+            

@@ -9,6 +9,8 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
@@ -20,6 +22,8 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 
 import brave.sampler.Sampler;
 
+@EnableResourceServer
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableDiscoveryClient
 @SpringBootApplication
 public class DatabaseMainReaderApplication {
