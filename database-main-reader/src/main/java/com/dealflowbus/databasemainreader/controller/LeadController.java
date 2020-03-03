@@ -3,7 +3,6 @@ package com.dealflowbus.databasemainreader.controller;
 
 import java.net.URI;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,10 +25,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.dealflowbus.databasemainreader.entities.Detail;
-import com.dealflowbus.databasemainreader.entities.Lead;
-import com.dealflowbus.databasemainreader.entities.LeadViews;
-import com.dealflowbus.databasemainreader.entities.Note;
+import com.dealflowbus.commons.models.Detail;
+import com.dealflowbus.commons.models.Lead;
+import com.dealflowbus.commons.models.LeadViews;
+import com.dealflowbus.commons.models.Note;
 import com.dealflowbus.databasemainreader.exceptions.LeadNotFoundException;
 import com.dealflowbus.databasemainreader.exceptions.NoteNotFoundException;
 import com.dealflowbus.databasemainreader.exceptions.WrongHTTPQueryFormula;
@@ -55,7 +54,7 @@ public class LeadController {
 	//getting full lead list asc
 	@JsonView(LeadViews.Base.class)
 	@GetMapping(path = "/leadscrude")
-	@PreAuthorize("hasAuthority('read_lead')")
+	@PreAuthorize("hasAuthority('update_lead')") //just an example
 	public List<Lead> getAllLeadsDesc() {	
 
 		return leadRepo.findAllByOrderByLastTouchedDesc();
@@ -65,8 +64,7 @@ public class LeadController {
 	//getting search results
 	@JsonView(LeadViews.List.class)
 	@GetMapping(path = "/lsearch")
-	@PreAuthorize("hasAuthority('read_lead')")
-	public List<Lead> querySearch(@RequestParam(value = "query") String query) {	
+		public List<Lead> querySearch(@RequestParam(value = "query") String query) {	
 
 		return leadRepo.querySearch(query);
 	}
@@ -75,7 +73,6 @@ public class LeadController {
 	//getting leads with customizable filtering
 	@JsonView(LeadViews.List.class)
 	@GetMapping(path = "/leads")
-	@PreAuthorize("hasAuthority('read_lead')")
 	public Page<Lead> getAllLeadsPageDesc(@RequestParam(value = "l", defaultValue = "15") int limit,
 											@RequestParam(value = "p", defaultValue = "0") int page,
 											@RequestParam(value = "filter", required = false, defaultValue = "4") int filter,
@@ -219,7 +216,6 @@ public class LeadController {
 	
 	//posting new note
 	@PostMapping("/leads/{id}/notes")
-	@PreAuthorize("hasAuthority('create_lead')")
 	public Lead addNoteToLead(@PathVariable int id, @RequestBody Note note) {
 		Lead lead = retrieveLead(id);
 		lead.setLastTouched(LocalDate.now());

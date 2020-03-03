@@ -1,4 +1,4 @@
-package com.dealflowbus.databasemainreader.entities;
+package com.dealflowbus.commons.models;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
