@@ -54,7 +54,7 @@ public class LeadController {
 	//getting full lead list asc
 	@JsonView(LeadViews.Base.class)
 	@GetMapping(path = "/leadscrude")
-	@PreAuthorize("hasAuthority('update_lead')") //just an example
+	@PreAuthorize("hasAuthority('read_lead')")
 	public List<Lead> getAllLeadsDesc() {	
 
 		return leadRepo.findAllByOrderByLastTouchedDesc();
@@ -64,6 +64,7 @@ public class LeadController {
 	//getting search results
 	@JsonView(LeadViews.List.class)
 	@GetMapping(path = "/lsearch")
+	@PreAuthorize("hasAuthority('read_lead')")
 		public List<Lead> querySearch(@RequestParam(value = "query") String query) {	
 
 		return leadRepo.querySearch(query);
@@ -73,6 +74,7 @@ public class LeadController {
 	//getting leads with customizable filtering
 	@JsonView(LeadViews.List.class)
 	@GetMapping(path = "/leads")
+	@PreAuthorize("hasAuthority('read_lead')")
 	public Page<Lead> getAllLeadsPageDesc(@RequestParam(value = "l", defaultValue = "15") int limit,
 											@RequestParam(value = "p", defaultValue = "0") int page,
 											@RequestParam(value = "filter", required = false, defaultValue = "4") int filter,
@@ -106,6 +108,7 @@ public class LeadController {
 	
 	//getting lead by id
 	@GetMapping("/leads/{id}")
+	@PreAuthorize("hasAuthority('read_lead')")
 	public Lead getLead(@PathVariable int id) {
 		Lead lead = retrieveLead(id);
 		
@@ -115,6 +118,7 @@ public class LeadController {
 
 	//Posting new Lead
 	@PostMapping("/leads")
+	@PreAuthorize("hasAuthority('create_lead')")
 	public ResponseEntity<Lead> saveLead(@RequestBody Lead lead) {
 		
 		lead.setDateArrival(LocalDate.now());
@@ -135,6 +139,7 @@ public class LeadController {
 	
 	//deleting lead
 	@DeleteMapping("/leads/{id}")
+	@PreAuthorize("hasAuthority('delete_lead')")
 	public String deleteLead(@PathVariable int id) {
 			
 		//checking if lead with such id exists
@@ -153,6 +158,7 @@ public class LeadController {
 	
 	//to fix
 	@PutMapping("/leads")
+	@PreAuthorize("hasAuthority('update_lead')")
 	public Lead updateLead(@RequestBody Lead lead) {
 		lead.setLastTouched(LocalDate.now());
 		LocalDate arrival = retrieveLead(lead.getId()).getDateArrival();
@@ -165,6 +171,7 @@ public class LeadController {
 	
 	//updating Lead with detail infromation
 	@PutMapping("/leads/{id}/details")
+	@PreAuthorize("hasAuthority('update_lead')")
 	public Lead addDescr(@PathVariable int id, @RequestBody Detail detail) {
 			
 		Lead lead = retrieveLead(id);
@@ -189,6 +196,7 @@ public class LeadController {
 	
 	//getting details by id
 	@GetMapping("/leads/{id}/details")
+	@PreAuthorize("hasAuthority('read_lead')")
 	public Detail getDetail(@PathVariable int id) {
 		Lead lead = retrieveLead(id);
 		return lead.getDetail();
@@ -206,6 +214,7 @@ public class LeadController {
 	
 	//get list of lead notes
 	@GetMapping("/leads/{id}/notes")
+	@PreAuthorize("hasAuthority('read_lead')")
 	public List<Note> getListOfLeadNotes(@PathVariable int id) {
 		
 		Lead lead = retrieveLead(id);
@@ -216,6 +225,7 @@ public class LeadController {
 	
 	//posting new note
 	@PostMapping("/leads/{id}/notes")
+	@PreAuthorize("hasAuthority('create_lead')")
 	public Lead addNoteToLead(@PathVariable int id, @RequestBody Note note) {
 		Lead lead = retrieveLead(id);
 		lead.setLastTouched(LocalDate.now());
@@ -231,6 +241,7 @@ public class LeadController {
 	
 	//deleting note by id
 	@DeleteMapping("/leads/{id}/notes/{noteId}")
+	@PreAuthorize("hasAuthority('delete_lead')")
 	public String deleteNoteFromLead(@PathVariable int id, @PathVariable int noteId) {
 		
 		//checking if note with such id exist

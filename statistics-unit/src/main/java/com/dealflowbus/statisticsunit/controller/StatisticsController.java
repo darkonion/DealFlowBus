@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dealflowbus.statisticsunit.feign.LeadFeignClient;
 import com.dealflowbus.statisticsunit.models.Lead;
-import com.dealflowbus.statisticsunit.models.Note;
 import com.dealflowbus.statisticsunit.statistics.MainEngine;
 
 

@@ -51,5 +51,7 @@ public class AuthorizationServerConfiguration implements AuthorizationServerConf
 		endpoints.authenticationManager(authenticationManager);
 		
 	}
+	
+	
 
 }
