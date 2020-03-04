@@ -9,7 +9,7 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Res
 
 @Configuration
 @EnableResourceServer
-public class WebSecurityConfiguration extends ResourceServerConfigurerAdapter {
+public class ZuulWebSecurityConfiguration extends ResourceServerConfigurerAdapter {
 	
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
@@ -24,5 +24,6 @@ public class WebSecurityConfiguration extends ResourceServerConfigurerAdapter {
 	@Override
 	  public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
 	       resources.resourceId("externalwebapp");
+	       
 	  }
 }

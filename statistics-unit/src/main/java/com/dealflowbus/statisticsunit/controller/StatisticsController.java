@@ -4,14 +4,13 @@ package com.dealflowbus.statisticsunit.controller;
 
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dealflowbus.statisticsunit.AccessToken;
 import com.dealflowbus.statisticsunit.feign.LeadFeignClient;
 import com.dealflowbus.statisticsunit.models.Lead;
 import com.dealflowbus.statisticsunit.statistics.MainEngine;
@@ -29,6 +28,9 @@ public class StatisticsController {
 	
 	@GetMapping("/leads")
 	private int getCount(@RequestParam(value = "count", defaultValue = "1") int countType) {
+		
+		list = lfc.getLeads(AccessToken.getToken());
+		
 		if (countType == 1) {
 			return MainEngine.getCount(list);
 		} else if (countType == 2) {
@@ -57,8 +59,8 @@ public class StatisticsController {
 	
 	
 	
-	@PostConstruct
+	/*@PostConstruct
 	private void restoreList() {
 		list = lfc.getLeads();
-	}
+	}*/
 }
