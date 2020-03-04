@@ -23,4 +23,4 @@ security:
       token-info-uri: http://localhost:9191/uaa/oauth/check_token
   
 ribbon:
-  timeout: 100000
+  ReadTimeout: 60000
