@@ -1,6 +1,10 @@
 server:
   port: 9191
 
+server:
+  servlet:
+    context-path: /uaa
+
 spring:
   datasource:
     url: jdbc:mysql://darkonion.atthost24.pl:3306/13936_dfauth?createDatabaseIfNotExist=true&serverTimezone=UTC&useSSL=false
