@@ -1,7 +1,5 @@
 server:
   port: 9191
-
-server:
   servlet:
     context-path: /uaa
 
