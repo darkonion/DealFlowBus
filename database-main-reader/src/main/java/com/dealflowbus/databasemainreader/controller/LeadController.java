@@ -156,15 +156,13 @@ public class LeadController {
 	}
 
 	
-	//to fix
+
 	@PutMapping("/leads")
 	@PreAuthorize("hasAuthority('update_lead')")
 	public Lead updateLead(@RequestBody Lead lead) {
 		lead.setLastTouched(LocalDate.now());
-		LocalDate arrival = retrieveLead(lead.getId()).getDateArrival();
-		lead.setDateArrival(arrival);
 		leadRepo.save(lead);
-		
+
 		return lead;
 	}
 	
