@@ -47,4 +47,24 @@ public class CustomizedMainReaderExceptionHandler extends ResponseEntityExceptio
 		
 		return new ResponseEntity<Object>(exceptionResponse, HttpStatus.BAD_REQUEST);
 	}
+	
+	@ExceptionHandler(MyFileNotFoundException.class)
+	public final ResponseEntity<Object> handleFileNotFoundExc(MyFileNotFoundException ex, WebRequest request) {
+		
+		ExceptionResponder exceptionResponse = new ExceptionResponder(new Date(), ex.getMessage(), request.getDescription(false));
+		
+		return new ResponseEntity<Object>(exceptionResponse, HttpStatus.NOT_FOUND);
+	}
+	
+	@ExceptionHandler(FileStorageException.class)
+	public final ResponseEntity<Object> handleFileStorageExc(FileStorageException ex, WebRequest request) {
+		
+		ExceptionResponder exceptionResponse = new ExceptionResponder(new Date(), ex.getMessage(), request.getDescription(false));
+		
+		return new ResponseEntity<Object>(exceptionResponse, HttpStatus.INSUFFICIENT_STORAGE);
+	}
+	
+	
+	
+	
 }
