@@ -44,4 +44,13 @@ public class DBFileService {
 		
 		return file;
 	}
+	
+	public String deleteFile(String fileId) {
+		
+		DBFile file = getFile(fileId);
+		dbFileRepo.delete(file);
+		
+		return "file: " + file.getFileName() + " was deleted";
+
+	}
 }

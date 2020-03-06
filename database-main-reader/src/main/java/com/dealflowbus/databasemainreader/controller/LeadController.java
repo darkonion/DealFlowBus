@@ -4,8 +4,6 @@ package com.dealflowbus.databasemainreader.controller;
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,12 +26,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.dealflowbus.commons.models.Detail;
 import com.dealflowbus.commons.models.Lead;
 import com.dealflowbus.commons.models.LeadViews;
-import com.dealflowbus.commons.models.Note;
 import com.dealflowbus.databasemainreader.exceptions.LeadNotFoundException;
-import com.dealflowbus.databasemainreader.exceptions.NoteNotFoundException;
 import com.dealflowbus.databasemainreader.exceptions.WrongHTTPQueryFormula;
 import com.dealflowbus.databasemainreader.repository.LeadRepository;
-import com.dealflowbus.databasemainreader.repository.NoteRepository;
+import com.dealflowbus.databasemainreader.services.LeadRetrieveService;
 import com.fasterxml.jackson.annotation.JsonView;
 
 @RestController
@@ -45,11 +41,12 @@ public class LeadController {
 	private LeadRepository leadRepo;
 	
 	@Autowired
-	private NoteRepository noteRepo;
+	private LeadRetrieveService leadRetrieveService;
+	
 
 
 	//METHODS FOR LEAD AND DETAIL --------------------------------------------------------------
-	
+
 	
 	//getting full lead list asc
 	@JsonView(LeadViews.Base.class)
@@ -110,7 +107,7 @@ public class LeadController {
 	@GetMapping("/leads/{id}")
 	@PreAuthorize("hasAuthority('read_lead')")
 	public Lead getLead(@PathVariable int id) {
-		Lead lead = retrieveLead(id);
+		Lead lead = leadRetrieveService.retrieveLead(id);
 		
 		return lead;
 	}
@@ -172,7 +169,7 @@ public class LeadController {
 	@PreAuthorize("hasAuthority('update_lead')")
 	public Lead addDescr(@PathVariable int id, @RequestBody Detail detail) {
 			
-		Lead lead = retrieveLead(id);
+		Lead lead = leadRetrieveService.retrieveLead(id);
 			
 		//updating last touched of lead
 		lead.setLastTouched(LocalDate.now());	
@@ -196,82 +193,13 @@ public class LeadController {
 	@GetMapping("/leads/{id}/details")
 	@PreAuthorize("hasAuthority('read_lead')")
 	public Detail getDetail(@PathVariable int id) {
-		Lead lead = retrieveLead(id);
+		Lead lead = leadRetrieveService.retrieveLead(id);
 		return lead.getDetail();
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	//METHODS FOR NOTES --------------------------------------------------------------
-	
-	
-	//get list of lead notes
-	@GetMapping("/leads/{id}/notes")
-	@PreAuthorize("hasAuthority('read_lead')")
-	public List<Note> getListOfLeadNotes(@PathVariable int id) {
-		
-		Lead lead = retrieveLead(id);
-		
-		return lead.getNotes();
-	}
 
 	
-	//posting new note
-	@PostMapping("/leads/{id}/notes")
-	@PreAuthorize("hasAuthority('create_lead')")
-	public Lead addNoteToLead(@PathVariable int id, @RequestBody Note note) {
-		Lead lead = retrieveLead(id);
-		lead.setLastTouched(LocalDate.now());
-		note.setIssueDate(LocalDate.now());
-			
-		lead.addNote(note);
 
-		leadRepo.save(lead);
-		
-		return lead;
-	}
-	
-	
-	//deleting note by id
-	@DeleteMapping("/leads/{id}/notes/{noteId}")
-	@PreAuthorize("hasAuthority('delete_lead')")
-	public String deleteNoteFromLead(@PathVariable int id, @PathVariable int noteId) {
-		
-		//checking if note with such id exist
-		if (!noteRepo.existsById(noteId)) {
-			throw new NoteNotFoundException("Note with id: " + id + " dont exist");
-		}
-		
-		noteRepo.deleteById(noteId);
-			
-		return "note with id: " + noteId + " deleted";
-	}
-
-
-	
-	
-	
-	
-	//HELPER METHODS --------------------------------------------------------------
-	
-	
-	private Lead retrieveLead(int id) {
-		Optional<Lead> findById = leadRepo.findById(id);
-		
-		if (!findById.isPresent()) {
-			throw new LeadNotFoundException("Lead with id: " + id + " dont exist");
-		}
-			//retrieving lead
-			Lead lead = findById.get();
-			
-			return lead;
-	}
-	
 }
 
 

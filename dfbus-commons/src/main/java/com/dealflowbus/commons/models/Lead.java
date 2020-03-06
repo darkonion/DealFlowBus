@@ -93,6 +93,10 @@ public class Lead {
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "lead_id")
 	private List<Note> notes;
+	
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "lead_id2")
+	private List<DBFile> files;
 
 	public Lead() {
 		
@@ -225,7 +229,20 @@ public class Lead {
 	public void setExtraAddress(String extraAddress) {
 		this.extraAddress = extraAddress;
 	}
-	
 
+	public void addFile(DBFile file) {
+	if (files == null) {
+		files = new ArrayList<DBFile>();
+	}
+		files.add(file);
+	}
+
+	public List<DBFile> getFiles() {
+		return files;
+	}
+
+	public void setFiles(List<DBFile> files) {
+		this.files = files;
+	}
 
 }
