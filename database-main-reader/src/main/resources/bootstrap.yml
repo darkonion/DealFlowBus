@@ -7,8 +7,4 @@ spring:
       fail-fast: true
       password: ovarkills11
       username: user
-  jpa:    show-sql: true
-
-  servlet:    multipart:      max-file-size: 100MB
-      max-request-size: 110MB
-      enabled: true                
+  jpa:    show-sql: true               
