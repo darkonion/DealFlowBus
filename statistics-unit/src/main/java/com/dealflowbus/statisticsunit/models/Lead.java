@@ -1,12 +1,11 @@
 package com.dealflowbus.statisticsunit.models;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Lead {
+public class Lead implements Serializable {
 
-	private int id;
-	private String projectName;
-	private String projectOwner;
+	
 	private boolean inProgress;
 	private boolean rejected;
 	private String field;
@@ -18,11 +17,9 @@ public class Lead {
 		
 	}
 	
-	public Lead(int id, String projectName, String projectOwner, boolean inProgress, boolean rejected, String field,
+	public Lead(boolean inProgress, boolean rejected, String field,
 			LocalDate dateArrival, LocalDate lastTouched, boolean inPortfolio) {
-		this.id = id;
-		this.projectName = projectName;
-		this.projectOwner = projectOwner;
+		
 		this.inProgress = inProgress;
 		this.rejected = rejected;
 		this.field = field;
@@ -31,30 +28,7 @@ public class Lead {
 		this.inPortfolio = inPortfolio;
 	}
 
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public String getProjectName() {
-		return projectName;
-	}
-
-	public void setProjectName(String projectName) {
-		this.projectName = projectName;
-	}
-
-	public String getProjectOwner() {
-		return projectOwner;
-	}
-
-	public void setProjectOwner(String projectOwner) {
-		this.projectOwner = projectOwner;
-	}
-
+	
 	public boolean isInProgress() {
 		return inProgress;
 	}
@@ -102,12 +76,6 @@ public class Lead {
 	public void setInPortfolio(boolean inPortfolio) {
 		this.inPortfolio = inPortfolio;
 	}
-	
-	
-	
-	
-	
-	
-	
+
 	
 }

@@ -1,4 +1,4 @@
-package com.dealflowbus.databasemainreader.entities;
+package com.dealflowbus.commons.models;
 
 
 import java.time.LocalDate;
@@ -19,12 +19,14 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonView;
 
+@DynamicUpdate(true)
 @JsonIgnoreProperties("hibernateLazyInitializer")
 @Entity
 @Table(name = "main")
@@ -91,6 +93,10 @@ public class Lead {
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "lead_id")
 	private List<Note> notes;
+	
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "lead_id2")
+	private List<DBFile> files;
 
 	public Lead() {
 		
@@ -223,7 +229,20 @@ public class Lead {
 	public void setExtraAddress(String extraAddress) {
 		this.extraAddress = extraAddress;
 	}
-	
 
+	public void addFile(DBFile file) {
+	if (files == null) {
+		files = new ArrayList<DBFile>();
+	}
+		files.add(file);
+	}
+
+	public List<DBFile> getFiles() {
+		return files;
+	}
+
+	public void setFiles(List<DBFile> files) {
+		this.files = files;
+	}
 
 }
