@@ -1,24 +1,26 @@
-zuul:
-  ignoredServices: '*'
-  host:
-    connect-timeout-millis: 20000
-    socket-timeout-millis: 20000
 
-  routes:
-    auth-service:
-      path: /uaa/** #path that will be intercepted
-      url: auth-service #which url the request will e mapped to
-      stripPrefix: false #if zuul should replace the "/uaa/" segment
-      sensitiveHeaders:
-
-    account-service:
-      path: /accounts/**
-      serviceId: account-service
-      stripPrefix: false
-      sensitiveHeaders:
-      
 server:
   port: 8765
   
+zuul:
+  sensitiveHeaders: Cookie,Set-Cookie
+  routes:
+    database-main-reader:
+      path: /**
+      url: http://localhost:8081/
+    oauth:
+      path: /oauth/**
+      url: http://localhost:9191/uaa/oauth  
+      
+security:
+  oauth2:   
+    client:
+      client-id: webgui
+      client-secret: ovarkills11
+      access-token-uri: http://localhost:9191/oauth/token
+      user-authorization-uri: http://localhost:9191/uaa/oauth/authorize
+    resource:
+      token-info-uri: http://localhost:9191/uaa/oauth/check_token
+  
 ribbon:
-  timeout: 100000
+  ReadTimeout: 60000
