@@ -1,6 +1,6 @@
 FROM openjdk:8-jdk-alpine
-ARG DEPENDENCY=target/dependency
-COPY ${DEPENDENCY}/BOOT-INF/lib /app/lib
-COPY ${DEPENDENCY}/BOOT-INF/classes /app
-COPY ${DEPENDENCY}/META-INF /app/META-INF
-ENTRYPOINT ["java", "-cp", "app:app/lib/*", "com.dealflowbus.statisticsunit.StatisticsUnitApplication"]
+VOLUME /tmp
+EXPOSE 8100
+ADD target/*.jar app.jar
+ENV JAVA_OPTS=""
+ENTRYPOINT [ "sh", "-c", "java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar /app.jar" ]
