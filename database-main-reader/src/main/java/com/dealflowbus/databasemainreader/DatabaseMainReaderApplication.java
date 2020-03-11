@@ -24,7 +24,6 @@ import brave.sampler.Sampler;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableDiscoveryClient
 @SpringBootApplication
-@EntityScan("com.dealflowbus.commons.models")
 public class DatabaseMainReaderApplication {
 	
 

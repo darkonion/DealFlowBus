@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.dealflowbus.commons.models.DBFile;
-import com.dealflowbus.commons.models.Lead;
-import com.dealflowbus.commons.models.UploadFileResponse;
+import com.dealflowbus.databasemainreader.models.DBFile;
+import com.dealflowbus.databasemainreader.models.Lead;
+import com.dealflowbus.databasemainreader.models.UploadFileResponse;
 import com.dealflowbus.databasemainreader.services.DBFileService;
 import com.dealflowbus.databasemainreader.services.LeadRetrieveService;
 

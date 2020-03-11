@@ -7,9 +7,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.dealflowbus.commons.models.DBFile;
 import com.dealflowbus.databasemainreader.exceptions.FileStorageException;
 import com.dealflowbus.databasemainreader.exceptions.MyFileNotFoundException;
+import com.dealflowbus.databasemainreader.models.DBFile;
 import com.dealflowbus.databasemainreader.repository.DBFileRepository;
 
 @Service

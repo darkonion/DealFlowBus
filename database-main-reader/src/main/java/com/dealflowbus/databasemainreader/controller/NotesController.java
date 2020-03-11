@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dealflowbus.commons.models.Lead;
-import com.dealflowbus.commons.models.Note;
 import com.dealflowbus.databasemainreader.exceptions.NoteNotFoundException;
+import com.dealflowbus.databasemainreader.models.Lead;
+import com.dealflowbus.databasemainreader.models.Note;
 import com.dealflowbus.databasemainreader.repository.NoteRepository;
 import com.dealflowbus.databasemainreader.services.LeadRetrieveService;
 

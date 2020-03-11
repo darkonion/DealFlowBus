@@ -23,11 +23,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.dealflowbus.commons.models.Detail;
-import com.dealflowbus.commons.models.Lead;
-import com.dealflowbus.commons.models.LeadViews;
 import com.dealflowbus.databasemainreader.exceptions.LeadNotFoundException;
 import com.dealflowbus.databasemainreader.exceptions.WrongHTTPQueryFormula;
+import com.dealflowbus.databasemainreader.models.Detail;
+import com.dealflowbus.databasemainreader.models.Lead;
+import com.dealflowbus.databasemainreader.models.LeadViews;
 import com.dealflowbus.databasemainreader.repository.LeadRepository;
 import com.dealflowbus.databasemainreader.services.LeadRetrieveService;
 import com.fasterxml.jackson.annotation.JsonView;
