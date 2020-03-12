@@ -3,10 +3,10 @@ version: '3.7'
 services:
 
   rabbitmq:
-    image: rabbitmq:3.8.3-management
-    ports:
-      - "5672:5672"
-      - "15672:15672"
+    image: rabbitmq:management
+    #ports:
+    #  - "5672:5672"
+    #  - "15672:15672"
     restart: always
     depends_on:
       - config-server
@@ -31,8 +31,8 @@ services:
       
   config-server:
     image: darkonion/config-server:0.0.1-SNAPSHOT
-    ports:
-      - "8888:8888"
+    #ports:
+    #  - "8888:8888"
     restart: always
     networks:
       - dealflowbus-inner-network    
@@ -85,8 +85,8 @@ services:
     environment:
       STORAGE_TYPE: mem
       RABBIT_URI: amqp://guest:guest@rabbitmq:5672
-    ports:
-      - "8081:8081"
+    #ports:
+    #  - "8081:8081"
     restart: always
     depends_on:
       - config-server
@@ -101,8 +101,8 @@ services:
     environment:
       STORAGE_TYPE: mem
       RABBIT_URI: amqp://guest:guest@rabbitmq:5672
-    ports:
-      - "8100:8100"
+    #ports:
+    #  - "8100:8100"
     restart: always
     depends_on:
       - config-server
