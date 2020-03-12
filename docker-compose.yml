@@ -1,9 +1,36 @@
 version: '3.7'
 
 services:
+
+  rabbitmq:
+    image: rabbitmq:3.8.3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    restart: always
+    depends_on:
+      - config-server
+    networks:
+      - dealflowbus-inner-network  
+      
+  zipkin-server:
+    image: openzipkin/zipkin
+    container_name: zipkin
+    environment:
+      STORAGE_TYPE: mem
+      RABBIT_URI: amqp://guest:guest@rabbitmq:5672
+    ports:
+      - "9411:9411"
+    restart: always
+    depends_on:
+      - config-server
+      - rabbitmq
+    networks:
+      - dealflowbus-inner-network  
+      
+      
   config-server:
     image: darkonion/config-server:0.0.1-SNAPSHOT
-
     ports:
       - "8888:8888"
     restart: always
@@ -13,7 +40,6 @@ services:
       
   naming-server:
     image: darkonion/main-eureka-naming-server:0.0.1-SNAPSHOT
-
     ports:
       - "8761:8761"
     restart: always
@@ -24,43 +50,57 @@ services:
       
   api-gateway:
     image: darkonion/api-gateway:0.0.1-SNAPSHOT
-
+    environment:
+      STORAGE_TYPE: mem
+      RABBIT_URI: amqp://guest:guest@rabbitmq:5672
     ports:
       - "8765:8765"
     restart: always
     depends_on:
       - config-server
       - naming-server
+      - rabbitmq
+      - zipkin-server
     networks:
       - dealflowbus-inner-network 
       
   auth-service:
     image: darkonion/auth-service:0.0.1-SNAPSHOT
-
+    environment:
+      STORAGE_TYPE: mem
+      RABBIT_URI: amqp://guest:guest@rabbitmq:5672
     ports:
       - "9191:9191"
     restart: always
     depends_on:
       - config-server
       - naming-server
+      - rabbitmq
+      - zipkin-server
     networks:
       - dealflowbus-inner-network 
       
   main-reader:
     image: darkonion/database-main-reader:0.0.1-SNAPSHOT
-
+    environment:
+      STORAGE_TYPE: mem
+      RABBIT_URI: amqp://guest:guest@rabbitmq:5672
     ports:
       - "8081:8081"
     restart: always
     depends_on:
       - config-server
       - naming-server
+      - rabbitmq
+      - zipkin-server
     networks:
       - dealflowbus-inner-network 
       
   statistics-unit:
     image: darkonion/statistics-unit:0.0.1-SNAPSHOT
-
+    environment:
+      STORAGE_TYPE: mem
+      RABBIT_URI: amqp://guest:guest@rabbitmq:5672
     ports:
       - "8100:8100"
     restart: always
@@ -68,6 +108,8 @@ services:
       - config-server
       - naming-server
       - main-reader
+      - rabbitmq
+      - zipkin-server
     networks:
       - dealflowbus-inner-network 
       
