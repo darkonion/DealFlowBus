@@ -1,10 +1,0 @@
-spring:
-  application:
-    name: database-main-reader
-  cloud:
-    config:
-      uri: http://config-server:8888
-      fail-fast: true
-      password: ovarkills11
-      username: user
-  jpa:    show-sql: true               

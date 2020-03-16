@@ -1,4 +1,4 @@
-package WebSecurityConfig;
+/*package WebSecurityConfig;
 
 
 import org.springframework.context.annotation.Configuration;
@@ -11,3 +11,4 @@ public class DBWebSecurityConfiguration extends ResourceServerConfigurerAdapter 
 	
 	
 }
+*/

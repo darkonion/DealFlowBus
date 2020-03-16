@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,7 +16,6 @@ import com.dealflowbus.statisticsunit.statistics.MainEngine;
 
 
 @RestController
-@RequestMapping("/stats")
 public class StatisticsController {
 	
 	@Autowired
@@ -25,7 +23,12 @@ public class StatisticsController {
 	
 	private List<Lead> list;
 	
-	@GetMapping("/leads")
+	@GetMapping("/")
+	private String testProbe() {
+		return "{healthy:true}";
+	}
+	
+	@GetMapping("/stats/leads")
 	private int getCount(@RequestParam(value = "count", defaultValue = "1") int countType) {
 		
 		list = lfsc.getLeadList();
@@ -51,7 +54,7 @@ public class StatisticsController {
 	}
 	
 	
-	@GetMapping("/trends")
+	@GetMapping("/stats/trends")
 	private boolean getTrend() {
 		list = lfsc.getLeadList();
 		return MainEngine.tendencyRising(list);

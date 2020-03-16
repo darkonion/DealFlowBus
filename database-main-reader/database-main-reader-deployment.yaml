@@ -1,0 +1,62 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: database-main-reader
+  name: database-main-reader
+spec:
+  replicas: 1
+  template:
+    metadata: 
+      labels:
+        io.kompose.service: database-main-reader
+    spec:
+      containers:
+      - env:
+        - name: DBL_DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              key: DBL_DB_NAME
+              name: database-main-reader-config
+        - name: DBL_HOSTNAME
+          valueFrom:
+            configMapKeyRef:
+              key: DBL_HOSTNAME
+              name: database-main-reader-config
+        - name: DBL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: DBL_PASSWORD
+              name: database-main-reader-secrets
+        - name: DBL_PORT
+          valueFrom:
+            configMapKeyRef:
+              key: DBL_PORT
+              name: database-main-reader-config
+        - name: DBL_USERNAME
+          valueFrom:
+            configMapKeyRef:
+              key: DBL_USERNAME
+              name: database-main-reader-config
+        image: darkonion/database-main-reader:0.0.2-SNAPSHOT
+        name: database-main-reader
+        ports:
+        - containerPort: 8081
+      restartPolicy: Always
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    io.kompose.service: database-main-reader
+  name: database-main-reader
+spec:
+  type: NodePort
+  ports:
+  - name: "8081"
+    port: 8081
+    targetPort: 8081
+  selector:
+    io.kompose.service: database-main-reader
+

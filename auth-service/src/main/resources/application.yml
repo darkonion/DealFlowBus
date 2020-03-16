@@ -1,0 +1,33 @@
+server:
+  port: 9191
+
+spring:
+  application:
+    name: auth-service
+
+  datasource:
+    url: jdbc:mysql://${DBA_HOSTNAME:localhost}:${DBA_PORT:3306}/${DBA_DB_NAME:oauth}
+    username: ${DBA_USERNAME:oauthmainadmin}
+    password: ${DBA_PASSWORD:ovarkills11}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    initialization-mode: always
+    
+  jpa:
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+
+logging:
+  level:
+    org: 
+      hibernate:
+        type: trace
+
+
+  sleuth:
+    sampler:
+      probability: 1.0     

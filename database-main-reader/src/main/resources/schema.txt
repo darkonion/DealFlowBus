@@ -1,0 +1,121 @@
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+
+
+CREATE DATABASE IF NOT EXISTS `leads` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `leads`;
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `description`
+--
+
+CREATE TABLE if not exists  if not exists  `description` (
+  `id_description` int(11) NOT NULL,
+  `description` longtext,
+  `content` varchar(45) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin2;
+
+CREATE TABLE if not exists  `files` (
+  `id` varchar(255) NOT NULL,
+  `data` longblob,
+  `file_name` varchar(255) DEFAULT NULL,
+  `file_type` varchar(255) DEFAULT NULL,
+  `lead_id2` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE if not exists  `main` (
+  `id` int(11) NOT NULL,
+  `project_name` varchar(45) DEFAULT NULL,
+  `project_owner` varchar(45) DEFAULT NULL,
+  `field` varchar(45) DEFAULT NULL,
+  `in_progress` tinyint(4) DEFAULT NULL,
+  `rejected` tinyint(4) DEFAULT NULL,
+  `in_portfolio` tinyint(4) DEFAULT NULL,
+  `descr_id` int(11) DEFAULT NULL,
+  `email` varchar(45) DEFAULT NULL,
+  `extra_address` varchar(45) DEFAULT NULL,
+  `date_arrival` date DEFAULT NULL,
+  `last_touched` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin2;
+
+CREATE TABLE if not exists  `notes` (
+  `note_id` int(11) NOT NULL,
+  `note` text,
+  `issue_date` date DEFAULT NULL,
+  `lead_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin2;
+
+
+ALTER TABLE `description`
+  ADD PRIMARY KEY (`id_description`);
+
+--
+-- Indexes for table `files`
+--
+ALTER TABLE `files`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `lead_id2` (`lead_id2`);
+
+--
+-- Indexes for table `main`
+--
+ALTER TABLE `main`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UK_ftcc67n1btaf9xe22b0wfs5dr` (`descr_id`),
+  ADD KEY `descr_id_idx` (`descr_id`);
+
+--
+-- Indexes for table `notes`
+--
+ALTER TABLE `notes`
+  ADD PRIMARY KEY (`note_id`),
+  ADD KEY `lead_id` (`lead_id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT dla tabeli `description`
+--
+ALTER TABLE `description`
+  MODIFY `id_description` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+--
+-- AUTO_INCREMENT dla tabeli `main`
+--
+ALTER TABLE `main`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+--
+-- AUTO_INCREMENT dla tabeli `notes`
+--
+ALTER TABLE `notes`
+  MODIFY `note_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+--
+-- Ograniczenia dla zrzutów tabel
+--
+
+--
+-- Ograniczenia dla tabeli `files`
+--
+ALTER TABLE `files`
+  ADD CONSTRAINT `lead_id2` FOREIGN KEY (`lead_id2`) REFERENCES `main` (`id`);
+
+--
+-- Ograniczenia dla tabeli `main`
+--
+ALTER TABLE `main`
+  ADD CONSTRAINT `descr_id` FOREIGN KEY (`descr_id`) REFERENCES `description` (`id_description`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Ograniczenia dla tabeli `notes`
+--
+ALTER TABLE `notes`
+  ADD CONSTRAINT `lead_id` FOREIGN KEY (`lead_id`) REFERENCES `main` (`id`);
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

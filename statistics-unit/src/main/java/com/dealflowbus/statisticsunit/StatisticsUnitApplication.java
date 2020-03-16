@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Bean;
 
 import brave.sampler.Sampler;
 
-@EnableDiscoveryClient
 @EnableFeignClients
 @SpringBootApplication
 public class StatisticsUnitApplication {

@@ -1,0 +1,18 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: gateway-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /stats/*
+        backend:
+          serviceName: statistics-unit
+          servicePort: 8100          
+      - path: /api/*
+        backend:
+          serviceName: database-main-reader
+          servicePort: 8081

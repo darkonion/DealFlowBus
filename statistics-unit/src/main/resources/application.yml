@@ -1,0 +1,12 @@
+server:  port: 8100
+
+spring:
+  application:
+    name: statistics-unit
+    
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 10000
+        readTimeout: 10000         ribbon:  ConnectTimeout: 60000  ReadTimeout: 60000  management:  endpoints:    web:      base-path: /manage      exposure:        include: "*"       

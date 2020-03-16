@@ -1,0 +1,37 @@
+version: '3.7'
+
+services:
+  mysql-main:
+    image: mysql:5.7
+    ports: 
+      - "3306:3306"
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: ovarkills11
+      MYSQL_USER: dfmainadmin
+      MYSQL_PASSWORD: ovarkills11
+      MYSQL_DATABASE: leads
+    volumes:
+      - mysql-database-data-volume:/var/lib/mysql
+
+  database-main-reader:
+    image: darkonion/database-main-reader:0.0.1-SNAPSHOT
+    depends_on:
+      - mysql-main
+    ports:
+     - "8081:8081"
+    restart: always
+    environment:
+      DBL_HOSTNAME: mysql-main
+      DBL_PORT: 3306
+      DBL_DB_NAME: leads
+      DBL_USERNAME: dfmainadmin
+      DBL_PASSWORD: ovarkills11
+
+
+
+# Volumes
+volumes:
+  mysql-database-data-volume:
+  

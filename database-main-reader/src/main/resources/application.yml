@@ -1,0 +1,48 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: database-main-reader
+
+  datasource:
+    url: jdbc:mysql://${DBL_HOSTNAME:localhost}:${DBL_PORT:3306}/${DBL_DB_NAME:leads}
+    username: ${DBL_USERNAME:dfmainadmin}
+    password: ${DBL_PASSWORD:ovarkills11}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    initialization-mode: always
+    
+  jpa:
+    hibernate:
+      ddl-auto: update
+      show-sql: true    
+      
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 110MB
+      enabled: true
+         
+  sleuth:
+    sampler:
+      probability: 1.0  
+  rabbitmq:
+    host: rabbitmq
+  zipkin:
+    baseUrl: http://localhost:9411/
+    enabled: true
+
+ribbon:
+  ConnectTimeout: 60000
+  ReadTimeout: 60000     
+    
+#security:
+#  oauth2:
+#    resource:
+#      token-info-uri: http://auth-service:9191/uaa/oauth/check_token
+#    client:
+#      client-id: webgui
+#      client-secret: ovarkills11
+ 
+
+

@@ -1,0 +1,57 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: mysql-main
+  name: mysql-main
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        io.kompose.service: mysql-main
+    spec:
+      containers:
+      - env:
+        - name: MYSQL_DATABASE
+          value: leads
+        - name: MYSQL_PASSWORD
+          value: ovarkills11
+        - name: MYSQL_ROOT_PASSWORD
+          value: ovarkills11
+        - name: MYSQL_USER
+          value: dfmainadmin
+        image: mysql:5.7
+        args: 
+          - "--ignore-db-dir=lost+found"
+        name: mysql-main
+        ports:
+        - containerPort: 3306
+        volumeMounts:
+        - mountPath: /var/lib/mysql
+          name: mysql-database-data-volume
+      restartPolicy: Always
+      volumes:
+      - name: mysql-database-data-volume
+        persistentVolumeClaim:
+          claimName: mysql-database-data-volume
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    io.kompose.service: mysql-main
+  name: mysql-main
+spec:
+  type: LoadBalancer
+  ports:
+  - name: "3306"
+    port: 3306
+    targetPort: 3306
+  selector:
+    io.kompose.service: mysql-main
+status:
