@@ -13,35 +13,30 @@ spec:
     spec:
       containers:
       - env:
-        - name: DBL_DB_NAME
-          valueFrom:
-            configMapKeyRef:
-              key: DBL_DB_NAME
-              name: database-main-reader-config
-        - name: DBL_HOSTNAME
-          valueFrom:
-            configMapKeyRef:
-              key: DBL_HOSTNAME
-              name: database-main-reader-config
         - name: DBL_PASSWORD
           valueFrom:
             secretKeyRef:
               key: DBL_PASSWORD
-              name: database-main-reader-secrets
-        - name: DBL_PORT
-          valueFrom:
-            configMapKeyRef:
-              key: DBL_PORT
-              name: database-main-reader-config
-        - name: DBL_USERNAME
-          valueFrom:
-            configMapKeyRef:
-              key: DBL_USERNAME
-              name: database-main-reader-config
-        image: darkonion/database-main-reader:0.0.2-SNAPSHOT
+              name: database-main-reader
+        image: darkonion/database-main-reader:0.0.5-SNAPSHOT
         name: database-main-reader
         ports:
-        - containerPort: 8081
+        - name: liveness-port
+          containerPort: 8081
+        readinessProbe:
+          httpGet:
+            path: /manage/health
+            port: liveness-port
+          failureThreshold: 5
+          periodSeconds: 10
+          initialDelaySeconds: 60
+        livenessProbe:
+          httpGet:
+            path: /manage/health
+            port: liveness-port
+          failureThreshold: 5
+          periodSeconds: 10
+          initialDelaySeconds: 60    
       restartPolicy: Always
 ---
 
@@ -59,4 +54,21 @@ spec:
     targetPort: 8081
   selector:
     io.kompose.service: database-main-reader
+    
+---
+
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: database-main-reader
+  namespace: default
+spec:
+  maxReplicas: 3
+  minReplicas: 1
+  scaleTargetRef:
+    apiVersion: extensions/v1beta1
+    kind: Deployment
+    name: database-main-reader
+  targetCPUUtilizationPercentage: 70
+
 

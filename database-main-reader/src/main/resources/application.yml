@@ -8,14 +8,15 @@ spring:
   datasource:
     url: jdbc:mysql://${DBL_HOSTNAME:localhost}:${DBL_PORT:3306}/${DBL_DB_NAME:leads}
     username: ${DBL_USERNAME:dfmainadmin}
-    password: ${DBL_PASSWORD:ovarkills11}
+    password: ${DBL_PASSWORD:demo}
     driver-class-name: com.mysql.cj.jdbc.Driver
     initialization-mode: always
     
   jpa:
+    show-sql: true
     hibernate:
       ddl-auto: update
-      show-sql: true    
+ 
       
   servlet:
     multipart:
@@ -26,15 +27,17 @@ spring:
   sleuth:
     sampler:
       probability: 1.0  
-  rabbitmq:
-    host: rabbitmq
-  zipkin:
-    baseUrl: http://localhost:9411/
-    enabled: true
 
 ribbon:
   ConnectTimeout: 60000
-  ReadTimeout: 60000     
+  ReadTimeout: 60000  
+
+management:
+  endpoints:
+    web:
+      base-path: /manage
+      exposure:
+        include: "*" 
     
 #security:
 #  oauth2:

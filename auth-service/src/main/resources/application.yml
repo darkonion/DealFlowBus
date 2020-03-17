@@ -1,16 +1,20 @@
 server:
   port: 9191
+  
+  servlet:
+    context-path: /uaa
 
 spring:
   application:
     name: auth-service
 
   datasource:
-    url: jdbc:mysql://${DBA_HOSTNAME:localhost}:${DBA_PORT:3306}/${DBA_DB_NAME:oauth}
-    username: ${DBA_USERNAME:oauthmainadmin}
-    password: ${DBA_PASSWORD:ovarkills11}
+    url: jdbc:mysql://${DBA_HOSTNAME}:${DBA_PORT}/${DBA_DB_NAME}
+    username: ${DBA_USERNAME}
+    password: ${DBA_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
     initialization-mode: always
+     
     
   jpa:
     hibernate:
@@ -30,4 +34,13 @@ logging:
 
   sleuth:
     sampler:
-      probability: 1.0     
+      probability: 1.0    
+      
+      
+management:
+  endpoints:
+    
+    web:
+      base-path: /manage
+      exposure:
+        include: "*" 

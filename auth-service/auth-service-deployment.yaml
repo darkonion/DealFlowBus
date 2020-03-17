@@ -2,77 +2,68 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   labels:
-    app: statistics-unit
-  name: statistics-unit
-  namespace: default
+    io.kompose.service: auth-service
+  name: auth-service
 spec:
   replicas: 1
-  minReadySeconds: 45
-  selector:
-    matchLabels:
-      app: statistics-unit
-  strategy:
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
-    type: RollingUpdate
   template:
     metadata:
       labels:
-        app: statistics-unit
+        io.kompose.service: auth-service
     spec:
       containers:
-      - image: darkonion/statistics-unit:0.0.5-SNAPSHOT
-        imagePullPolicy: IfNotPresent
-        name: statistics-unit
-        env:
-          - name: DATABASE_MAIN_READER_URI
-            value: http://database-main-reader
+      - env:
+        - name: DBA_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: DBA_PASSWORD
+              name: auth-service
+        image: darkonion/auth-service:0.0.11-SNAPSHOT
+        name: auth-service
         ports:
         - name: liveness-port
-          containerPort: 8100
+          containerPort: 9191
         readinessProbe:
           httpGet:
-            path: /
+            path: uaa/manage/health
             port: liveness-port
           failureThreshold: 5
           periodSeconds: 10
           initialDelaySeconds: 60
         livenessProbe:
           httpGet:
-            path: /
+            path: uaa/manage/health
             port: liveness-port
           failureThreshold: 5
           periodSeconds: 10
           initialDelaySeconds: 60    
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
-  
 ---
 
 apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: statistics-unit
-  name: statistics-unit
-  namespace: default
+    io.kompose.service: auth-service
+  name: auth-service
 spec:
-  ports:
-  - port: 8100
-    protocol: TCP
-    targetPort: 8100
-  selector:
-    app: statistics-unit
-  sessionAffinity: None
   type: NodePort
+  ports:
+  - name: "9191"
+    port: 9191
+    protocol: TCP
+    targetPort: 9191
+  sessionAffinity: None
+  selector:
+    io.kompose.service: auth-service
 
 ---
 
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: statistics-unit
+  name: auth-service
   namespace: default
 spec:
   maxReplicas: 3
@@ -80,5 +71,6 @@ spec:
   scaleTargetRef:
     apiVersion: extensions/v1beta1
     kind: Deployment
-    name: statistics-unit
+    name: auth-service
   targetCPUUtilizationPercentage: 70
+

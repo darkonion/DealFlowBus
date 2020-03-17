@@ -1,0 +1,56 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: mysql-oauth
+  name: mysql-oauth
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        io.kompose.service: mysql-oauth
+    spec:
+      containers:
+      - env:
+        - name: MYSQL_DATABASE
+          value: oauth
+        - name: MYSQL_PASSWORD
+          value: ovarkills11
+        - name: MYSQL_ROOT_PASSWORD
+          value: ovarkills11
+        - name: MYSQL_USER
+          value: oauthmainadmin
+        image: mysql:5.7
+        args: 
+          - "--ignore-db-dir=lost+found"
+        name: mysql-oauth
+        ports:
+        - containerPort: 3306
+        volumeMounts:
+        - mountPath: /var/lib/mysql
+          name: mysql-oauth-database-data-volume
+      restartPolicy: Always
+      volumes:
+      - name: mysql-oauth-database-data-volume
+        persistentVolumeClaim:
+          claimName: mysql-oauth-database-data-volume
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    io.kompose.service: mysql-oauth
+  name: mysql-oauth
+spec:
+  type: LoadBalancer
+  ports:
+  - name: "3307"
+    port: 3307
+    targetPort: 3306
+  selector:
+    io.kompose.service: mysql-oauth
+

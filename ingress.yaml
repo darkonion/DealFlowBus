@@ -16,3 +16,9 @@ spec:
         backend:
           serviceName: database-main-reader
           servicePort: 8081
+      - path: /uaa/*
+        backend:
+          serviceName: auth-service
+          servicePort: 9191
+      
+      
