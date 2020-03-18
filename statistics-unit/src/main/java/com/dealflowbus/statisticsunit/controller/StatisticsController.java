@@ -5,6 +5,7 @@ package com.dealflowbus.statisticsunit.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,13 +24,11 @@ public class StatisticsController {
 	
 	private List<Lead> list;
 	
-	@GetMapping("/")
-	private String testProbe() {
-		return "{healthy:true}";
-	}
-	
+
 	@GetMapping("/stats/leads")
-	private int getCount(@RequestParam(value = "count", defaultValue = "1") int countType) {
+	@PreAuthorize("hasAuthority('read_lead')")
+	public int getCount(@RequestParam(value = "count", defaultValue = "1") int countType) {
+		System.out.println("inside getCount method");
 		
 		list = lfsc.getLeadList();
 		
@@ -55,7 +54,8 @@ public class StatisticsController {
 	
 	
 	@GetMapping("/stats/trends")
-	private boolean getTrend() {
+	@PreAuthorize("hasAuthority('read_lead')")
+	public boolean getTrend() {
 		list = lfsc.getLeadList();
 		return MainEngine.tendencyRising(list);
 	}

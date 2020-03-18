@@ -8,13 +8,19 @@ spring:
   application:
     name: auth-service
 
+#  datasource:
+#    url: jdbc:mysql://${DBA_HOSTNAME}:${DBA_PORT}/${DBA_DB_NAME}
+#    username: ${DBA_USERNAME}
+#    password: ${DBA_PASSWORD}
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    initialization-mode: always
+     
   datasource:
-    url: jdbc:mysql://${DBA_HOSTNAME}:${DBA_PORT}/${DBA_DB_NAME}
-    username: ${DBA_USERNAME}
-    password: ${DBA_PASSWORD}
+    url: jdbc:mysql://darkonion.atthost24.pl:3306/13936_dfauth?createDatabaseIfNotExist=true&serverTimezone=UTC&useSSL=false
+    username: 13936_dfauth
+    password: ovarkills11
     driver-class-name: com.mysql.cj.jdbc.Driver
     initialization-mode: always
-     
     
   jpa:
     hibernate:

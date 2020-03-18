@@ -11,13 +11,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
-//import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -32,6 +33,7 @@ import com.dealflowbus.databasemainreader.services.LeadRetrieveService;
 import com.fasterxml.jackson.annotation.JsonView;
 
 @RestController
+@RequestMapping("/api")
 public class LeadController {
 
 
@@ -41,30 +43,29 @@ public class LeadController {
 	@Autowired
 	private LeadRetrieveService leadRetrieveService;
 	
-	@GetMapping("/")
-	private String testProbe() {
-		return "{healthy:true}";
-	}
-
-	
 
 	//METHODS FOR LEAD AND DETAIL --------------------------------------------------------------
 
 	
 	//getting full lead list asc
 	@JsonView(LeadViews.Base.class)
-	@GetMapping(path = "/api/leadscrude")
-	//@PreAuthorize("hasAuthority('read_lead')")
+	@GetMapping(path = "/leadscrude")
+	@PreAuthorize("hasAuthority('read_lead')")
 	public List<Lead> getAllLeadsDesc() {	
 
 		return leadRepo.findAllByOrderByLastTouchedDesc();
 	}
 	
+	@GetMapping(path = "/alive")
+	@PreAuthorize("permitAll()")
+	public String alive() {
+		return "ok";
+	}
 	
 	//getting search results
 	@JsonView(LeadViews.List.class)
-	@GetMapping(path = "/api/lsearch")
-	//@PreAuthorize("hasAuthority('read_lead')")
+	@GetMapping(path = "/lsearch")
+	@PreAuthorize("hasAuthority('read_lead')")
 		public List<Lead> querySearch(@RequestParam(value = "query") String query) {	
 
 		return leadRepo.querySearch(query);
@@ -73,8 +74,8 @@ public class LeadController {
 	
 	//getting leads with customizable filtering
 	@JsonView(LeadViews.List.class)
-	@GetMapping(path = "/api/leads")
-	//@PreAuthorize("hasAuthority('read_lead')")
+	@GetMapping(path = "/leads")
+	@PreAuthorize("hasAuthority('read_lead')")
 	public Page<Lead> getAllLeadsPageDesc(@RequestParam(value = "l", defaultValue = "15") int limit,
 											@RequestParam(value = "p", defaultValue = "0") int page,
 											@RequestParam(value = "filter", required = false, defaultValue = "4") int filter,
@@ -107,8 +108,8 @@ public class LeadController {
 	
 	
 	//getting lead by id
-	@GetMapping("/api/leads/{id}")
-	//@PreAuthorize("hasAuthority('read_lead')")
+	@GetMapping("/leads/{id}")
+	@PreAuthorize("hasAuthority('read_lead')")
 	public Lead getLead(@PathVariable int id) {
 		Lead lead = leadRetrieveService.retrieveLead(id);
 		
@@ -117,8 +118,8 @@ public class LeadController {
 	
 
 	//Posting new Lead
-	@PostMapping("/api/leads")
-	//@PreAuthorize("hasAuthority('create_lead')")
+	@PostMapping("/leads")
+	@PreAuthorize("hasAuthority('create_lead')")
 	public ResponseEntity<Lead> saveLead(@RequestBody Lead lead) {
 		
 		lead.setDateArrival(LocalDate.now());
@@ -138,8 +139,8 @@ public class LeadController {
 	
 	
 	//deleting lead
-	@DeleteMapping("/api/leads/{id}")
-	//@PreAuthorize("hasAuthority('delete_lead')")
+	@DeleteMapping("/leads/{id}")
+	@PreAuthorize("hasAuthority('delete_lead')")
 	public String deleteLead(@PathVariable int id) {
 			
 		//checking if lead with such id exists
@@ -157,8 +158,8 @@ public class LeadController {
 
 	
 
-	@PutMapping("/api/leads")
-	//@PreAuthorize("hasAuthority('update_lead')")
+	@PutMapping("/leads")
+	@PreAuthorize("hasAuthority('update_lead')")
 	public Lead updateLead(@RequestBody Lead lead) {
 		lead.setLastTouched(LocalDate.now());
 		leadRepo.save(lead);
@@ -168,8 +169,8 @@ public class LeadController {
 	
 	
 	//updating Lead with detail infromation
-	@PutMapping("/api/leads/{id}/details")
-	//@PreAuthorize("hasAuthority('update_lead')")
+	@PutMapping("/leads/{id}/details")
+	@PreAuthorize("hasAuthority('update_lead')")
 	public Lead addDescr(@PathVariable int id, @RequestBody Detail detail) {
 			
 		Lead lead = leadRetrieveService.retrieveLead(id);
@@ -193,8 +194,8 @@ public class LeadController {
 	
 	
 	//getting details by id
-	@GetMapping("/api/leads/{id}/details")
-	//@PreAuthorize("hasAuthority('read_lead')")
+	@GetMapping("/leads/{id}/details")
+	@PreAuthorize("hasAuthority('read_lead')")
 	public Detail getDetail(@PathVariable int id) {
 		Lead lead = leadRetrieveService.retrieveLead(id);
 		return lead.getDetail();

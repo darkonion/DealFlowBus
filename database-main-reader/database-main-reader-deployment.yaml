@@ -18,25 +18,37 @@ spec:
             secretKeyRef:
               key: DBL_PASSWORD
               name: database-main-reader
-        image: darkonion/database-main-reader:0.0.5-SNAPSHOT
+        - name: OAUTH_ID
+          valueFrom:
+            secretKeyRef:
+              key: OAUTH_ID
+              name: database-main-reader
+        - name: OAUTH_SECRET
+          valueFrom:
+            secretKeyRef:
+              key: OAUTH_SECRET
+              name: database-main-reader
+        - name: OAUTH_SERVICE_URI
+          value: http://auth-service:9191/
+        image: darkonion/database-main-reader:0.1.6-SNAPSHOT
         name: database-main-reader
         ports:
         - name: liveness-port
           containerPort: 8081
         readinessProbe:
           httpGet:
-            path: /manage/health
+            path: manage/health
             port: liveness-port
           failureThreshold: 5
           periodSeconds: 10
           initialDelaySeconds: 60
         livenessProbe:
           httpGet:
-            path: /manage/health
+            path: manage/health
             port: liveness-port
           failureThreshold: 5
           periodSeconds: 10
-          initialDelaySeconds: 60    
+          initialDelaySeconds: 60   
       restartPolicy: Always
 ---
 

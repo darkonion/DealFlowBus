@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 //import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,7 +43,7 @@ public class NotesController {
 	
 	//posting new note
 	@PostMapping("/leads/{id}/notes")
-	//@PreAuthorize("hasAuthority('create_lead')")
+	@PreAuthorize("hasAuthority('create_lead')")
 	public Lead addNoteToLead(@PathVariable int id, @RequestBody Note note) {
 		Lead lead = leadRetrieveService.retrieveLead(id);
 		lead.setLastTouched(LocalDate.now());
@@ -58,7 +59,7 @@ public class NotesController {
 	
 	//deleting note by id
 	@DeleteMapping("/leads/{id}/notes/{noteId}")
-	//@PreAuthorize("hasAuthority('delete_lead')")
+	@PreAuthorize("hasAuthority('delete_lead')")
 	public String deleteNoteFromLead(@PathVariable int id, @PathVariable int noteId) {
 		
 		//checking if note with such id exist

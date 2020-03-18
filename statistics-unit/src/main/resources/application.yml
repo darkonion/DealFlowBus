@@ -9,4 +9,4 @@ feign:
     config:
       default:
         connectTimeout: 10000
-        readTimeout: 10000         ribbon:  ConnectTimeout: 60000  ReadTimeout: 60000  management:  endpoints:    web:      base-path: /manage      exposure:        include: "*"       
+        readTimeout: 10000         ribbon:  ConnectTimeout: 60000  ReadTimeout: 60000  management:  endpoints:    web:      base-path: /manage      exposure:        include: "*"       security:     oauth2:    resource:      token-info-uri: ${OAUTH_SERVICE_URI:http://localhost:9191}/uaa/oauth/check_token    client:      client-id: ${OAUTH_ID:webgui}      client-secret: ${OAUTH_SECRET:ovarkills11}#logging:#  level:#    root: debug

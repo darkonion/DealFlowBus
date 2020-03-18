@@ -2,7 +2,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   labels:
-    app: statistics-unit
+    io.kompose.service: statistics-unit
   name: statistics-unit
   namespace: default
 spec:
@@ -10,7 +10,7 @@ spec:
   minReadySeconds: 45
   selector:
     matchLabels:
-      app: statistics-unit
+      io.kompose.service: statistics-unit
   strategy:
     rollingUpdate:
       maxSurge: 25%
@@ -19,56 +19,61 @@ spec:
   template:
     metadata:
       labels:
-        app: statistics-unit
+        io.kompose.service: statistics-unit
     spec:
       containers:
-      - image: darkonion/statistics-unit:0.0.5-SNAPSHOT
-        imagePullPolicy: IfNotPresent
+      - env:
+        - name: OAUTH_ID
+          valueFrom:
+            secretKeyRef:
+              key: OAUTH_ID
+              name: database-main-reader
+        - name: OAUTH_SECRET
+          valueFrom:
+            secretKeyRef:
+              key: OAUTH_SECRET
+              name: database-main-reader
+        - name: OAUTH_SERVICE_URI
+          value: http://auth-service:9191
+        - name: DATABASE_MAIN_READER_URI
+          value: http://database-main-reader
+        image: darkonion/statistics-unit:0.1.5-SNAPSHOT
         name: statistics-unit
-        env:
-          - name: DATABASE_MAIN_READER_URI
-            value: http://database-main-reader
         ports:
         - name: liveness-port
           containerPort: 8100
         readinessProbe:
           httpGet:
-            path: /
+            path: manage/health
             port: liveness-port
           failureThreshold: 5
           periodSeconds: 10
           initialDelaySeconds: 60
         livenessProbe:
           httpGet:
-            path: /
+            path: manage/health
             port: liveness-port
           failureThreshold: 5
           periodSeconds: 10
           initialDelaySeconds: 60    
       restartPolicy: Always
-      terminationGracePeriodSeconds: 30
-  
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: statistics-unit
+    io.kompose.service: statistics-unit
   name: statistics-unit
   namespace: default
 spec:
+  type: NodePort
   ports:
-  - port: 8100
-    protocol: TCP
+  - name: "8100"
+    port: 8100
     targetPort: 8100
   selector:
-    app: statistics-unit
-  sessionAffinity: None
-  type: NodePort
-
+    io.kompose.service: statistics-unit
 ---
-
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:

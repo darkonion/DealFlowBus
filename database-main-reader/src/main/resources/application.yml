@@ -12,6 +12,12 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     initialization-mode: always
     
+#  datasource:
+#    url: jdbc:mysql://darkonion.atthost24.pl:3306/13936_dfmain?serverTimezone=UTC
+#    username: 13936_dfmain
+#    password: ovarkills11
+#    driver-class-name: com.mysql.jdbc.Driver 
+    
   jpa:
     show-sql: true
     hibernate:
@@ -28,24 +34,25 @@ spring:
     sampler:
       probability: 1.0  
 
-ribbon:
-  ConnectTimeout: 60000
-  ReadTimeout: 60000  
+#ribbon:
+#  ConnectTimeout: 60000
+#  ReadTimeout: 60000  
 
 management:
   endpoints:
     web:
       base-path: /manage
       exposure:
-        include: "*" 
+        include: "*"
     
-#security:
-#  oauth2:
-#    resource:
-#      token-info-uri: http://auth-service:9191/uaa/oauth/check_token
-#    client:
-#      client-id: webgui
-#      client-secret: ovarkills11
- 
+security:   
+  oauth2:
+    resource:
+      token-info-uri: ${OAUTH_SERVICE_URI}/uaa/oauth/check_token
+    client:
+      client-id: ${OAUTH_ID}
+      client-secret: ${OAUTH_SECRET}
 
 
+#ogging:#  level:
+#    root: debug    

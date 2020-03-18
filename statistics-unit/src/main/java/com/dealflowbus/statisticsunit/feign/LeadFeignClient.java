@@ -17,11 +17,8 @@ public interface LeadFeignClient {
 	
 	
 	
-	//@RequestMapping(method = RequestMethod.GET, value = "/database-main-reader/api/leadscrude")
-	//List<Lead> getLeads(@RequestHeader("Authorization") String token);
-	
 	@RequestMapping(method = RequestMethod.GET, value = "/api/leadscrude")
-	List<Lead> getLeads();
+	List<Lead> getLeads(@RequestHeader("Authorization") String token);
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/api/leads/{id}/notes")
 	List<Note> getNotes(@PathVariable(value = "id") int id);

@@ -5,6 +5,7 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 //import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,7 +35,7 @@ public class FilesController {
 	
 	
 	@PostMapping("/leads/{id}/files")
-	//@PreAuthorize("hasAuthority('create_lead')")
+	@PreAuthorize("hasAuthority('create_lead')")
 	public UploadFileResponse uploadFile(@RequestParam MultipartFile file, @PathVariable int id) {
 		
 		DBFile dbFile = fileService.storeFile(file);
@@ -52,7 +53,7 @@ public class FilesController {
 	}
 	
 	@GetMapping("/downloadFile/{fileId}")
-	//@PreAuthorize("hasAuthority('read_lead')")
+	@PreAuthorize("hasAuthority('read_lead')")
 	public ResponseEntity downloadFile(@PathVariable String fileId) {
 		
 		DBFile file = fileService.getFile(fileId);
@@ -65,7 +66,7 @@ public class FilesController {
 	}
 	
 	@DeleteMapping("/deleteFile/{fileId}")
-	//@PreAuthorize("hasAuthority('delete_lead')")
+	@PreAuthorize("hasAuthority('delete_lead')")
 	public String deleteFile(@PathVariable String fileId) {
 		
 		return fileService.deleteFile(fileId);
