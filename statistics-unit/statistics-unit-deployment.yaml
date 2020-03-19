@@ -37,7 +37,9 @@ spec:
           value: http://auth-service:9191
         - name: DATABASE_MAIN_READER_URI
           value: http://database-main-reader
-        image: darkonion/statistics-unit:0.1.5-SNAPSHOT
+        - name: CLOUD_GCP_ENABLED
+          value: "true"
+        image: darkonion/statistics-unit:0.2.0-SNAPSHOT
         name: statistics-unit
         ports:
         - name: liveness-port

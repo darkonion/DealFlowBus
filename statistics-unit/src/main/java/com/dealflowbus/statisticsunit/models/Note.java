@@ -2,6 +2,7 @@ package com.dealflowbus.statisticsunit.models;
 
 import java.time.LocalDate;
 
+//currently useless
 public class Note {
 	
 	private String note;

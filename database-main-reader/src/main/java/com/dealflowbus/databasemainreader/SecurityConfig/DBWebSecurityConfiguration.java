@@ -1,4 +1,4 @@
-package com.dealflowbus.databasemainreader.exceptions.SecurityConfig;
+package com.dealflowbus.databasemainreader.SecurityConfig;
 
 
 import org.springframework.context.annotation.Configuration;

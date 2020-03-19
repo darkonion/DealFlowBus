@@ -3,8 +3,6 @@ package com.dealflowbus.statisticsunit.statistics;
 import java.time.LocalDate;
 import java.util.List;
 
-import org.springframework.boot.autoconfigure.web.servlet.WebMvcProperties.LocaleResolver;
-
 import com.dealflowbus.statisticsunit.models.Lead;
 
 public class MainEngine {

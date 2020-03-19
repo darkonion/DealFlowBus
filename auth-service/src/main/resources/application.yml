@@ -7,20 +7,18 @@ server:
 spring:
   application:
     name: auth-service
+    
+  sleuth:    sampler:      probability: 0.25
+  
+  cloud:    gcp:      trace:        enabled: ${CLOUD_GCP_ENABLED:false}
 
-#  datasource:
-#    url: jdbc:mysql://${DBA_HOSTNAME}:${DBA_PORT}/${DBA_DB_NAME}
-#    username: ${DBA_USERNAME}
-#    password: ${DBA_PASSWORD}
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-#    initialization-mode: always
-     
   datasource:
-    url: jdbc:mysql://darkonion.atthost24.pl:3306/13936_dfauth?createDatabaseIfNotExist=true&serverTimezone=UTC&useSSL=false
-    username: 13936_dfauth
-    password: ovarkills11
+    url: jdbc:mysql://${DBA_HOSTNAME:localhost}:${DBA_PORT:3306}/${DBA_DB_NAME:oauth?serverTimezone=UTC&useSSL=false}
+    username: ${DBA_USERNAME:root}
+    password: ${DBA_PASSWORD:demopass1234}
     driver-class-name: com.mysql.cj.jdbc.Driver
     initialization-mode: always
+
     
   jpa:
     hibernate:
@@ -35,18 +33,14 @@ logging:
   level:
     org: 
       hibernate:
-        type: trace
-
-
-  sleuth:
-    sampler:
-      probability: 1.0    
-      
+        type: trace    
       
 management:
   endpoints:
-    
     web:
       base-path: /manage
       exposure:
         include: "*" 
+        
+        
+        

@@ -1,15 +1,10 @@
 package com.dealflowbus.databasemainreader.controller;
 
 
-import java.net.URI;
-import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,15 +16,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.dealflowbus.databasemainreader.exceptions.LeadNotFoundException;
-import com.dealflowbus.databasemainreader.exceptions.WrongHTTPQueryFormula;
 import com.dealflowbus.databasemainreader.models.Detail;
 import com.dealflowbus.databasemainreader.models.Lead;
 import com.dealflowbus.databasemainreader.models.LeadViews;
-import com.dealflowbus.databasemainreader.repository.LeadRepository;
-import com.dealflowbus.databasemainreader.services.LeadRetrieveService;
+import com.dealflowbus.databasemainreader.services.DBLeadService;
 import com.fasterxml.jackson.annotation.JsonView;
 
 @RestController
@@ -38,10 +29,7 @@ public class LeadController {
 
 
 	@Autowired
-	private LeadRepository leadRepo;
-	
-	@Autowired
-	private LeadRetrieveService leadRetrieveService;
+	private DBLeadService dBLeadService;
 	
 
 	//METHODS FOR LEAD AND DETAIL --------------------------------------------------------------
@@ -53,13 +41,7 @@ public class LeadController {
 	@PreAuthorize("hasAuthority('read_lead')")
 	public List<Lead> getAllLeadsDesc() {	
 
-		return leadRepo.findAllByOrderByLastTouchedDesc();
-	}
-	
-	@GetMapping(path = "/alive")
-	@PreAuthorize("permitAll()")
-	public String alive() {
-		return "ok";
+		return dBLeadService.getAllLeadsDesc();
 	}
 	
 	//getting search results
@@ -68,7 +50,7 @@ public class LeadController {
 	@PreAuthorize("hasAuthority('read_lead')")
 		public List<Lead> querySearch(@RequestParam(value = "query") String query) {	
 
-		return leadRepo.querySearch(query);
+		return dBLeadService.querySearch(query);
 	}
 	
 	
@@ -76,33 +58,12 @@ public class LeadController {
 	@JsonView(LeadViews.List.class)
 	@GetMapping(path = "/leads")
 	@PreAuthorize("hasAuthority('read_lead')")
-	public Page<Lead> getAllLeadsPageDesc(@RequestParam(value = "l", defaultValue = "15") int limit,
+	public Page<Lead> getAllLeadsPageable(@RequestParam(value = "l", defaultValue = "15") int limit,
 											@RequestParam(value = "p", defaultValue = "0") int page,
 											@RequestParam(value = "filter", required = false, defaultValue = "4") int filter,
 											@RequestParam(value = "invorder", required = false) boolean invorder) {	
 		
-		Pageable pageable;	
-		
-		if (!invorder) {
-			pageable = PageRequest.of(page, limit, Sort.by("lastTouched").descending());
-		} else {
-			pageable = PageRequest.of(page, limit, Sort.by("lastTouched").ascending());
-		}
-		
-		if (filter == 1) {
-			return leadRepo.findAllKicked(pageable);
-		} else if (filter == 2) {
-			return leadRepo.findAllInPortfolio(pageable);
-		} else if (filter == 3) {
-			return leadRepo.findAllInProgress(pageable);
-		} else if (filter == 4) {
-			return leadRepo.findAllActiveLeads(pageable);
-		} else if (filter == 5) {
-			return leadRepo.findAll(pageable);
-		} else {
-				//maybe it is worth to hardcode here Hystrix formula
-				throw new WrongHTTPQueryFormula("Mapping parameters were wrong");
-		}
+		return dBLeadService.getAllLeadsPageable(invorder, page, limit, filter);
 
 	}
 	
@@ -111,7 +72,7 @@ public class LeadController {
 	@GetMapping("/leads/{id}")
 	@PreAuthorize("hasAuthority('read_lead')")
 	public Lead getLead(@PathVariable int id) {
-		Lead lead = leadRetrieveService.retrieveLead(id);
+		Lead lead = dBLeadService.retrieveLead(id);
 		
 		return lead;
 	}
@@ -121,20 +82,8 @@ public class LeadController {
 	@PostMapping("/leads")
 	@PreAuthorize("hasAuthority('create_lead')")
 	public ResponseEntity<Lead> saveLead(@RequestBody Lead lead) {
-		
-		lead.setDateArrival(LocalDate.now());
-		lead.setLastTouched(LocalDate.now());
-		System.out.println(lead.getDateArrival());
-		Lead savedLead = leadRepo.save(lead);
-		
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-											.path("/{id}")
-											.buildAndExpand(savedLead.getId())
-											.toUri();
-		
-		ResponseEntity<Lead> responseEntity = ResponseEntity.created(uri).build();
-		
-		return responseEntity;
+	
+		return dBLeadService.saveLead(lead);
 	}
 	
 	
@@ -142,54 +91,25 @@ public class LeadController {
 	@DeleteMapping("/leads/{id}")
 	@PreAuthorize("hasAuthority('delete_lead')")
 	public String deleteLead(@PathVariable int id) {
-			
-		//checking if lead with such id exists
-		boolean existsById = leadRepo.existsById(id);
-		
-		if(!existsById) {
-				throw new LeadNotFoundException("Lead with id: " + id + " dont exist");
-		}
-			
-		//deleting
-		leadRepo.deleteById(id);
-
-		return "Lead with id - "+id+" was removed from system";
-	}
-
 	
-
+		return dBLeadService.deleteLead(id);
+	}
+	
+	//updating lead
 	@PutMapping("/leads")
 	@PreAuthorize("hasAuthority('update_lead')")
-	public Lead updateLead(@RequestBody Lead lead) {
-		lead.setLastTouched(LocalDate.now());
-		leadRepo.save(lead);
-
-		return lead;
+	public ResponseEntity<Lead> updateLead(@RequestBody Lead lead) {
+		
+		return dBLeadService.updateLead(lead);
 	}
 	
 	
-	//updating Lead with detail infromation
+	//updating Lead with detail infromation, or just updating detail
 	@PutMapping("/leads/{id}/details")
-	@PreAuthorize("hasAuthority('update_lead')")
-	public Lead addDescr(@PathVariable int id, @RequestBody Detail detail) {
-			
-		Lead lead = leadRetrieveService.retrieveLead(id);
-			
-		//updating last touched of lead
-		lead.setLastTouched(LocalDate.now());	
-			
-		//retrieving current lead detail id
-		int tempId = lead.getDetail().getDescId();
-			
-		//assigning current lead detail to new detail
-		detail.setDescId(tempId);
-			
-		//setting new detail to retrieved lead
-		lead.setDetail(detail);
-				
-		//commiting in database
-		leadRepo.save(lead);
-		return lead;
+	@PreAuthorize("hasAuthority('create_lead')")
+	public ResponseEntity<Lead> addDescr(@PathVariable int id, @RequestBody Detail detail) {
+
+		return dBLeadService.addDescr(id, detail);
 	}
 	
 	
@@ -197,7 +117,7 @@ public class LeadController {
 	@GetMapping("/leads/{id}/details")
 	@PreAuthorize("hasAuthority('read_lead')")
 	public Detail getDetail(@PathVariable int id) {
-		Lead lead = leadRetrieveService.retrieveLead(id);
+		Lead lead = dBLeadService.retrieveLead(id);
 		return lead.getDetail();
 	}
 	

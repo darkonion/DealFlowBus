@@ -4,20 +4,16 @@ server:
 spring:
   application:
     name: database-main-reader
+  
+  cloud:    gcp:      trace:        enabled: ${CLOUD_GCP_ENABLED:false}
 
   datasource:
-    url: jdbc:mysql://${DBL_HOSTNAME:localhost}:${DBL_PORT:3306}/${DBL_DB_NAME:leads}
-    username: ${DBL_USERNAME:dfmainadmin}
-    password: ${DBL_PASSWORD:demo}
+    url: jdbc:mysql://${DBL_HOSTNAME:localhost}:${DBL_PORT:3306}/${DBL_DB_NAME:leads?serverTimezone=UTC&useSSL=false}
+    username: ${DBL_USERNAME:root}
+    password: ${DBL_PASSWORD:demopass1234}
     driver-class-name: com.mysql.cj.jdbc.Driver
     initialization-mode: always
-    
-#  datasource:
-#    url: jdbc:mysql://darkonion.atthost24.pl:3306/13936_dfmain?serverTimezone=UTC
-#    username: 13936_dfmain
-#    password: ovarkills11
-#    driver-class-name: com.mysql.jdbc.Driver 
-    
+
   jpa:
     show-sql: true
     hibernate:
@@ -32,7 +28,7 @@ spring:
          
   sleuth:
     sampler:
-      probability: 1.0  
+      probability: 0.25  
 
 #ribbon:
 #  ConnectTimeout: 60000
@@ -48,11 +44,11 @@ management:
 security:   
   oauth2:
     resource:
-      token-info-uri: ${OAUTH_SERVICE_URI}/uaa/oauth/check_token
+      token-info-uri: ${OAUTH_SERVICE_URI:http://localhost:9191}/uaa/oauth/check_token
     client:
-      client-id: ${OAUTH_ID}
-      client-secret: ${OAUTH_SECRET}
+      client-id: ${OAUTH_ID:webgui}
+      client-secret: ${OAUTH_SECRET:demopass1234}
 
 
-#ogging:#  level:
-#    root: debug    
+logging:  level:
+    root: debug    

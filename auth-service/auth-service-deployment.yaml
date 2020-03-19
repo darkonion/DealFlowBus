@@ -18,7 +18,9 @@ spec:
             secretKeyRef:
               key: DBA_PASSWORD
               name: auth-service
-        image: darkonion/auth-service:0.0.11-SNAPSHOT
+        - name: CLOUD_GCP_ENABLED
+          value: "true"
+        image: darkonion/auth-service:0.2.0-SNAPSHOT
         name: auth-service
         ports:
         - name: liveness-port

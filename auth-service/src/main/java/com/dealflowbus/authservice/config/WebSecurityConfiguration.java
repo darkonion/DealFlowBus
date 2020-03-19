@@ -14,6 +14,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	
+	
+	@Autowired
+	private UserDetailsService userDetailsService;
+	
+	
+	
 	@Bean
 	protected AuthenticationManager getAuthenticationManager() throws Exception {
 		return super.authenticationManagerBean();
@@ -24,8 +30,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
 	}
 	
-	@Autowired
-	private UserDetailsService userDetailsService;
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -34,7 +38,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-
+		
+	//single public entry for health monitoring
+		
 		http
 	    .authorizeRequests()
 	    .antMatchers("/manage/health").permitAll()

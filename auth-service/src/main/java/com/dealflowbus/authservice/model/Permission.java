@@ -13,6 +13,12 @@ import javax.persistence.Table;
 @Table(name = "permission")
 public class Permission implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5636008475224270756L;
+
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;

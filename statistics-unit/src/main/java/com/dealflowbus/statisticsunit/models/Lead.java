@@ -6,6 +6,12 @@ import java.time.LocalDate;
 public class Lead implements Serializable {
 
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2908116142472869016L;
+	
+	//only crucial for statistics parameters
 	private boolean inProgress;
 	private boolean rejected;
 	private String field;

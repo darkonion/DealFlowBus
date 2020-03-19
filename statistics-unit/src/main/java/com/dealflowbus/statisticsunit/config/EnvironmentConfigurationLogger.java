@@ -1,4 +1,4 @@
-package com.dealflowbus.statisticsunit;
+package com.dealflowbus.statisticsunit.config;
 
 import java.util.Arrays;
 import java.util.stream.StreamSupport;

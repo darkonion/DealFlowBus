@@ -30,7 +30,9 @@ spec:
               name: database-main-reader
         - name: OAUTH_SERVICE_URI
           value: http://auth-service:9191/
-        image: darkonion/database-main-reader:0.1.6-SNAPSHOT
+        - name: CLOUD_GCP_ENABLED
+          value: "true"
+        image: darkonion/database-main-reader:0.2.0-SNAPSHOT
         name: database-main-reader
         ports:
         - name: liveness-port

@@ -11,6 +11,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class AuthUserDetail extends User implements UserDetails {
 
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6285257989519937392L;
+
 	public AuthUserDetail() {
 	}
 
@@ -26,7 +31,6 @@ public class AuthUserDetail extends User implements UserDetails {
 		getRoles().forEach(role -> {grantedAuthority.add(new SimpleGrantedAuthority(role.getName()));
 			role.getPermissions().forEach(permission -> {grantedAuthority.add(new SimpleGrantedAuthority(permission.getName()));
 			});
-		
 		
 		});
 
