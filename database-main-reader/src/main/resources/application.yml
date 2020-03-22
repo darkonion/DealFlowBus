@@ -5,7 +5,10 @@ spring:
   application:
     name: database-main-reader
   
-  cloud:    gcp:      trace:        enabled: ${CLOUD_GCP_ENABLED:false}
+  cloud:
+    gcp:
+      trace:
+        enabled: ${CLOUD_GCP_ENABLED:false}
 
   datasource:
     url: jdbc:mysql://${DBL_HOSTNAME:localhost}:${DBL_PORT:3306}/${DBL_DB_NAME:leads?serverTimezone=UTC&useSSL=false}
@@ -50,5 +53,7 @@ security:
       client-secret: ${OAUTH_SECRET:demopass1234}
 
 
-logging:  level:
-    root: debug    
+#logging:
+#  level:
+#    root: debug
+    

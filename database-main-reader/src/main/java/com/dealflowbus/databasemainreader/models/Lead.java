@@ -1,30 +1,21 @@
 package com.dealflowbus.databasemainreader.models;
 
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+		import java.time.LocalDate;
+		import java.util.ArrayList;
+		import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+		import javax.persistence.*;
 
-import org.hibernate.annotations.DynamicUpdate;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.format.annotation.DateTimeFormat.ISO;
+		import javax.validation.constraints.NotNull;
+		import javax.validation.constraints.Size;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonView;
+		import org.hibernate.annotations.DynamicUpdate;
+		import org.springframework.format.annotation.DateTimeFormat;
+		import org.springframework.format.annotation.DateTimeFormat.ISO;
+
+		import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+		import com.fasterxml.jackson.annotation.JsonView;
 
 @DynamicUpdate(true)
 @JsonIgnoreProperties("hibernateLazyInitializer")
@@ -37,74 +28,74 @@ public class Lead {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private int id;
-	
+
 	@NotNull
 	@Size(min = 2, message = "Name should be at least 2 characters long")
 	@Size(max = 40, message = "Too long name, max 40 characters")
 	@JsonView(LeadViews.List.class)
 	@Column(name = "project_name")
 	private String projectName;
-	
+
 	@NotNull
 	@Size(min = 2, message = "Owner should be at least 2 characters long")
 	@Size(max = 40, message = "Too long name of Owner, max 40 characters")
 	@JsonView(LeadViews.List.class)
 	@Column(name = "project_owner")
 	private String projectOwner;
-	
+
 	@JsonView(LeadViews.Base.class)
 	@Column(name = "field")
 	private String field;
-	
+
 	@NotNull
 	@JsonView(LeadViews.List.class)
 	@Column(name = "email")
 	private String email;
-	
+
 	@JsonView(LeadViews.List.class)
 	@Column(name = "extra_address")
 	private String extraAddress;
-	
+
 	@JsonView(LeadViews.Base.class)
 	@Column(name = "in_progress")
 	private boolean inProgress;
-	
+
 	@JsonView(LeadViews.Base.class)
 	@Column(name = "rejected")
 	private boolean rejected;
-	
+
 	@JsonView(LeadViews.Base.class)
 	@Column(name = "in_portfolio")
-	private boolean inPortfolio;	
-	
+	private boolean inPortfolio;
+
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name="descr_id")
 	private Detail detail;
-	
+
 	@JsonView(LeadViews.Base.class)
 	@DateTimeFormat(iso = ISO.DATE)
 	@Column(name = "date_arrival")
 	private LocalDate dateArrival;
-	
+
 	@JsonView(LeadViews.Base.class)
 	@Column(name = "last_touched")
 	private LocalDate lastTouched;
-	
+
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "lead_id")
 	private List<Note> notes;
-	
+
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "lead_id2")
 	private List<DBFile> files;
 
 	public Lead() {
-		
+
 	}
 
 	public Lead(String projectName, String projectOwner,
-			String field, String email, String extraAddress) {
-		
+				String field, String email, String extraAddress) {
+
 		this.projectName = projectName;
 		this.projectOwner = projectOwner;
 		this.inProgress = false;
@@ -114,8 +105,8 @@ public class Lead {
 		this.field = field;
 		this.email = email;
 		this.extraAddress = extraAddress;
-		
-		
+
+
 	}
 
 	public int getId() {
@@ -189,7 +180,7 @@ public class Lead {
 	public void setLastTouched(LocalDate lastTouched) {
 		this.lastTouched = lastTouched;
 	}
-	
+
 
 	public List<Note> getNotes() {
 		return notes;
@@ -198,7 +189,7 @@ public class Lead {
 	public void setNotes(List<Note> notes) {
 		this.notes = notes;
 	}
-	
+
 	public void addNote(Note note) {
 		if (notes == null) {
 			notes = new ArrayList<Note>();
@@ -231,9 +222,9 @@ public class Lead {
 	}
 
 	public void addFile(DBFile file) {
-	if (files == null) {
-		files = new ArrayList<DBFile>();
-	}
+		if (files == null) {
+			files = new ArrayList<DBFile>();
+		}
 		files.add(file);
 	}
 
@@ -244,5 +235,29 @@ public class Lead {
 	public void setFiles(List<DBFile> files) {
 		this.files = files;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + id;
+		return result;
+	}
+
+	@Override
+	//if id is equal, entities are equal
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Lead other = (Lead) obj;
+        return id == other.id;
+
+    }
+
+
 
 }

@@ -67,6 +67,27 @@ public class Detail {
 	public String toString() {
 		return "Details [id=" + descId + ", description=" + description + ", content=" + content + "]";
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + descId;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Detail other = (Detail) obj;
+        return descId == other.descId;
+    }
+	
 	
 	
 }
