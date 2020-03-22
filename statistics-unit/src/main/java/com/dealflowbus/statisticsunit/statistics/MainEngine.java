@@ -6,7 +6,11 @@ import java.util.List;
 import com.dealflowbus.statisticsunit.models.Lead;
 
 public class MainEngine {
-
+	
+	
+	private MainEngine() {
+		
+	}
 
 	public static int getCount(List<Lead> leads) {
 		
@@ -99,11 +103,7 @@ public class MainEngine {
 			}
 	
 		}
-		if (countLastMonth > countTwoMonthsAgo) {
-			return true;
-		} else {
-			return false;
-		}
+        return countLastMonth > countTwoMonthsAgo;
 	}
 	
 	

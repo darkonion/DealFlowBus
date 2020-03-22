@@ -8,12 +8,17 @@ spring:
   application:
     name: auth-service
     
-  sleuth:    sampler:      probability: 0.25
+  sleuth:
+    sampler:
+      probability: 0.25
   
-  cloud:    gcp:      trace:        enabled: ${CLOUD_GCP_ENABLED:false}
+  cloud:
+    gcp:
+      trace:
+        enabled: ${CLOUD_GCP_ENABLED:false}
 
   datasource:
-    url: jdbc:mysql://${DBA_HOSTNAME:localhost}:${DBA_PORT:3306}/${DBA_DB_NAME:oauth?serverTimezone=UTC&useSSL=false}
+    url: jdbc:mysql://${DBA_HOSTNAME:localhost}:${DBA_PORT:3306}/${DBA_DB_NAME:oauth?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true}
     username: ${DBA_USERNAME:root}
     password: ${DBA_PASSWORD:demopass1234}
     driver-class-name: com.mysql.cj.jdbc.Driver
