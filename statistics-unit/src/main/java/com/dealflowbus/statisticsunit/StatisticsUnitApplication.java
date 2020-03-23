@@ -15,13 +15,12 @@ import brave.sampler.Sampler;
 @EnableResourceServer
 public class StatisticsUnitApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(StatisticsUnitApplication.class, args);
-	}
-	
-	@Bean
-	public Sampler defaultSampler() {
-		return Sampler.ALWAYS_SAMPLE;
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(StatisticsUnitApplication.class, args);
+    }
 
+    @Bean
+    public Sampler defaultSampler() {
+        return Sampler.ALWAYS_SAMPLE;
+    }
 }

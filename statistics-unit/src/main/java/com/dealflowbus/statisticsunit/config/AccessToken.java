@@ -5,11 +5,12 @@ import org.springframework.security.oauth2.provider.authentication.OAuth2Authent
 
 
 public class AccessToken {
-	
-	public static String getToken() {
-		OAuth2AuthenticationDetails a2details = (OAuth2AuthenticationDetails) SecurityContextHolder.getContext().getAuthentication().getDetails();
-		
-		return a2details.getTokenType().concat(" ").concat(a2details.getTokenValue());
-	}
 
+    public static String getToken() {
+        OAuth2AuthenticationDetails a2details = (OAuth2AuthenticationDetails) SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getDetails();
+
+        return a2details.getTokenType().concat(" ").concat(a2details.getTokenValue());
+    }
 }

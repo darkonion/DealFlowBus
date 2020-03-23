@@ -1,146 +1,142 @@
 package com.dealflowbus.authservice.model;
 
-import java.io.Serializable;
-import java.util.List;
-import javax.persistence.JoinColumn;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "user")
 public class User implements Serializable {
-	
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4661462771113893132L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer id;
 
-	@Column(name = "username")
-	private String username;
-	
-	@Column(name = "password")
-	private String password;
-	
-	@Column(name = "email")
-	private String email;
-	
-	@Column(name = "enabled")
-	private boolean enabled;
-	
-	@Column(name = "accountNonExpired")
-	private boolean accountNonExpired;
-	
-	@Column(name = "credentialsNonExpired")
-	private boolean credentialsNonExpired;
-	
-	@Column(name = "accountNonLocked")
-	private boolean accountNonLocked;
-	
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "role_user", joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")}, 
-									inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
-	private List<Role> roles;
-	
-	
-	 public User() {
-	 }
+    /**
+     *
+     */
+    private static final long serialVersionUID = -4661462771113893132L;
 
-	 public User(User user) {
-		 this.username = user.getUsername();
-	     this.password = user.getPassword();
-	     this.email = user.getEmail();
-	     this.enabled = user.isEnabled();
-	     this.accountNonExpired = user.isAccountNonExpired();
-	     this.credentialsNonExpired = user.isCredentialsNonExpired();
-	     this.accountNonLocked = user.isAccountNonLocked();
-	     this.roles = user.getRoles();
-	 }
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
 
-	public Integer getId() {
-		return id;
-	}
+    @Column(name = "username")
+    private String username;
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    @Column(name = "password")
+    private String password;
 
-	public String getUsername() {
-		return username;
-	}
+    @Column(name = "email")
+    private String email;
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
+    @Column(name = "enabled")
+    private boolean enabled;
 
-	public String getPassword() {
-		return password;
-	}
+    @Column(name = "accountNonExpired")
+    private boolean accountNonExpired;
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    @Column(name = "credentialsNonExpired")
+    private boolean credentialsNonExpired;
 
-	public String getEmail() {
-		return email;
-	}
+    @Column(name = "accountNonLocked")
+    private boolean accountNonLocked;
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "role_user", joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
+    private List<Role> roles;
 
-	public boolean isEnabled() {
-		return enabled;
-	}
 
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
-	}
+    public User() {
+    }
 
-	public boolean isAccountNonExpired() {
-		return accountNonExpired;
-	}
+    public User(User user) {
+        this.username = user.getUsername();
+        this.password = user.getPassword();
+        this.email = user.getEmail();
+        this.enabled = user.isEnabled();
+        this.accountNonExpired = user.isAccountNonExpired();
+        this.credentialsNonExpired = user.isCredentialsNonExpired();
+        this.accountNonLocked = user.isAccountNonLocked();
+        this.roles = user.getRoles();
+    }
 
-	public void setAccountNonExpired(boolean accountNonExpired) {
-		this.accountNonExpired = accountNonExpired;
-	}
+    public Integer getId() {
+        return id;
+    }
 
-	public boolean isCredentialsNonExpired() {
-		return credentialsNonExpired;
-	}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	public void setCredentialsNonExpired(boolean credentialsNonExpired) {
-		this.credentialsNonExpired = credentialsNonExpired;
-	}
+    public String getUsername() {
+        return username;
+    }
 
-	public boolean isAccountNonLocked() {
-		return accountNonLocked;
-	}
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
-	public void setAccountNonLocked(boolean accountNonLocked) {
-		this.accountNonLocked = accountNonLocked;
-	}
+    public String getPassword() {
+        return password;
+    }
 
-	public List<Role> getRoles() {
-		return roles;
-	}
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-	public void setRoles(List<Role> roles) {
-		this.roles = roles;
-	}
-	 
-	 
-	    
+    public String getEmail() {
+        return email;
+    }
 
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public boolean isAccountNonExpired() {
+        return accountNonExpired;
+    }
+
+    public void setAccountNonExpired(boolean accountNonExpired) {
+        this.accountNonExpired = accountNonExpired;
+    }
+
+    public boolean isCredentialsNonExpired() {
+        return credentialsNonExpired;
+    }
+
+    public void setCredentialsNonExpired(boolean credentialsNonExpired) {
+        this.credentialsNonExpired = credentialsNonExpired;
+    }
+
+    public boolean isAccountNonLocked() {
+        return accountNonLocked;
+    }
+
+    public void setAccountNonLocked(boolean accountNonLocked) {
+        this.accountNonLocked = accountNonLocked;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
 }

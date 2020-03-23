@@ -1,7 +1,7 @@
 package com.dealflowbus.databasemainreader.models;
 
 
-		import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -23,7 +23,7 @@ import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-		import java.util.Objects;
+import java.util.Objects;
 
 @DynamicUpdate(true)
 @JsonIgnoreProperties("hibernateLazyInitializer")
@@ -32,231 +32,229 @@ import java.util.List;
 public class Lead {
 
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
 
-	@NotNull
-	@Size(min = 2, message = "Name should be at least 2 characters long")
-	@Size(max = 40, message = "Too long name, max 40 characters")
-	@JsonView(LeadViews.List.class)
-	@Column(name = "project_name")
-	private String projectName;
+    @NotNull
+    @Size(min = 2, message = "Name should be at least 2 characters long")
+    @Size(max = 40, message = "Too long name, max 40 characters")
+    @JsonView(LeadViews.List.class)
+    @Column(name = "project_name")
+    private String projectName;
 
-	@NotNull
-	@Size(min = 2, message = "Owner should be at least 2 characters long")
-	@Size(max = 40, message = "Too long name of Owner, max 40 characters")
-	@JsonView(LeadViews.List.class)
-	@Column(name = "project_owner")
-	private String projectOwner;
+    @NotNull
+    @Size(min = 2, message = "Owner should be at least 2 characters long")
+    @Size(max = 40, message = "Too long name of Owner, max 40 characters")
+    @JsonView(LeadViews.List.class)
+    @Column(name = "project_owner")
+    private String projectOwner;
 
-	@JsonView(LeadViews.Base.class)
-	@Column(name = "field")
-	private String field;
+    @JsonView(LeadViews.Base.class)
+    @Column(name = "field")
+    private String field;
 
-	@NotNull
-	@JsonView(LeadViews.List.class)
-	@Column(name = "email")
-	private String email;
+    @NotNull
+    @JsonView(LeadViews.List.class)
+    @Column(name = "email")
+    private String email;
 
-	@JsonView(LeadViews.List.class)
-	@Column(name = "extra_address")
-	private String extraAddress;
+    @JsonView(LeadViews.List.class)
+    @Column(name = "extra_address")
+    private String extraAddress;
 
-	@JsonView(LeadViews.Base.class)
-	@Column(name = "in_progress")
-	private boolean inProgress;
+    @JsonView(LeadViews.Base.class)
+    @Column(name = "in_progress")
+    private boolean inProgress;
 
-	@JsonView(LeadViews.Base.class)
-	@Column(name = "rejected")
-	private boolean rejected;
+    @JsonView(LeadViews.Base.class)
+    @Column(name = "rejected")
+    private boolean rejected;
 
-	@JsonView(LeadViews.Base.class)
-	@Column(name = "in_portfolio")
-	private boolean inPortfolio;
+    @JsonView(LeadViews.Base.class)
+    @Column(name = "in_portfolio")
+    private boolean inPortfolio;
 
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name="descr_id")
-	private Detail detail;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "descr_id")
+    private Detail detail;
 
-	@JsonView(LeadViews.Base.class)
-	@DateTimeFormat(iso = ISO.DATE)
-	@Column(name = "date_arrival")
-	private LocalDate dateArrival;
+    @JsonView(LeadViews.Base.class)
+    @DateTimeFormat(iso = ISO.DATE)
+    @Column(name = "date_arrival")
+    private LocalDate dateArrival;
 
-	@JsonView(LeadViews.Base.class)
-	@Column(name = "last_touched")
-	private LocalDate lastTouched;
+    @JsonView(LeadViews.Base.class)
+    @Column(name = "last_touched")
+    private LocalDate lastTouched;
 
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "lead_id")
-	private List<Note> notes;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "lead_id")
+    private List<Note> notes;
 
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "lead_id2")
-	private List<DBFile> files;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "lead_id2")
+    private List<DBFile> files;
 
-	public Lead() {
+    public Lead() {
 
-	}
+    }
 
-	public Lead(String projectName, String projectOwner,
-				String field, String email, String extraAddress) {
+    public Lead(String projectName, String projectOwner,
+            String field, String email, String extraAddress) {
 
-		this.projectName = projectName;
-		this.projectOwner = projectOwner;
-		this.inProgress = false;
-		this.rejected = false;
-		this.inPortfolio= false;
-		this.detail = new Detail();
-		this.field = field;
-		this.email = email;
-		this.extraAddress = extraAddress;
+        this.projectName = projectName;
+        this.projectOwner = projectOwner;
+        this.inProgress = false;
+        this.rejected = false;
+        this.inPortfolio = false;
+        this.detail = new Detail();
+        this.field = field;
+        this.email = email;
+        this.extraAddress = extraAddress;
+    }
 
+    public int getId() {
+        return id;
+    }
 
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	public int getId() {
-		return id;
-	}
+    public String getProjectName() {
+        return projectName;
+    }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
 
-	public String getProjectName() {
-		return projectName;
-	}
+    public String getProjectOwner() {
+        return projectOwner;
+    }
 
-	public void setProjectName(String projectName) {
-		this.projectName = projectName;
-	}
+    public void setProjectOwner(String projectOwner) {
+        this.projectOwner = projectOwner;
+    }
 
-	public String getProjectOwner() {
-		return projectOwner;
-	}
+    public boolean isInProgress() {
+        return inProgress;
+    }
 
-	public void setProjectOwner(String projectOwner) {
-		this.projectOwner = projectOwner;
-	}
+    public void setInProgress(boolean inProgress) {
+        this.inProgress = inProgress;
+    }
 
-	public boolean isInProgress() {
-		return inProgress;
-	}
+    public boolean isRejected() {
+        return rejected;
+    }
 
-	public void setInProgress(boolean inProgress) {
-		this.inProgress = inProgress;
-	}
+    public void setRejected(boolean rejected) {
+        this.rejected = rejected;
+    }
 
-	public boolean isRejected() {
-		return rejected;
-	}
+    public Detail getDetail() {
+        return detail;
+    }
 
-	public void setRejected(boolean rejected) {
-		this.rejected = rejected;
-	}
+    public void setDetail(Detail detail) {
+        this.detail = detail;
+    }
 
-	public Detail getDetail() {
-		return detail;
-	}
+    public String getField() {
+        return field;
+    }
 
-	public void setDetail(Detail detail) {
-		this.detail = detail;
-	}
+    public void setField(String field) {
+        this.field = field;
+    }
 
-	public String getField() {
-		return field;
-	}
+    public LocalDate getDateArrival() {
+        return dateArrival;
+    }
 
-	public void setField(String field) {
-		this.field = field;
-	}
+    public void setDateArrival(LocalDate dateArrival) {
+        this.dateArrival = dateArrival;
+    }
 
-	public LocalDate getDateArrival() {
-		return dateArrival;
-	}
+    public LocalDate getLastTouched() {
+        return lastTouched;
+    }
 
-	public void setDateArrival(LocalDate dateArrival) {
-		this.dateArrival = dateArrival;
-	}
-
-	public LocalDate getLastTouched() {
-		return lastTouched;
-	}
-
-	public void setLastTouched(LocalDate lastTouched) {
-		this.lastTouched = lastTouched;
-	}
+    public void setLastTouched(LocalDate lastTouched) {
+        this.lastTouched = lastTouched;
+    }
 
 
-	public List<Note> getNotes() {
-		return notes;
-	}
+    public List<Note> getNotes() {
+        return notes;
+    }
 
-	public void setNotes(List<Note> notes) {
-		this.notes = notes;
-	}
+    public void setNotes(List<Note> notes) {
+        this.notes = notes;
+    }
 
-	public void addNote(Note note) {
-		if (notes == null) {
-			notes = new ArrayList<Note>();
-		}
-		notes.add(note);
-	}
+    public void addNote(Note note) {
+        if (notes == null) {
+            notes = new ArrayList<Note>();
+        }
+        notes.add(note);
+    }
 
-	public boolean isInPortfolio() {
-		return inPortfolio;
-	}
+    public boolean isInPortfolio() {
+        return inPortfolio;
+    }
 
-	public void setInPortfolio(boolean inPortfolio) {
-		this.inPortfolio = inPortfolio;
-	}
+    public void setInPortfolio(boolean inPortfolio) {
+        this.inPortfolio = inPortfolio;
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-	public String getExtraAddress() {
-		return extraAddress;
-	}
+    public String getExtraAddress() {
+        return extraAddress;
+    }
 
-	public void setExtraAddress(String extraAddress) {
-		this.extraAddress = extraAddress;
-	}
+    public void setExtraAddress(String extraAddress) {
+        this.extraAddress = extraAddress;
+    }
 
-	public void addFile(DBFile file) {
-		if (files == null) {
-			files = new ArrayList<DBFile>();
-		}
-		files.add(file);
-	}
+    public void addFile(DBFile file) {
+        if (files == null) {
+            files = new ArrayList<DBFile>();
+        }
+        files.add(file);
+    }
 
-	public List<DBFile> getFiles() {
-		return files;
-	}
+    public List<DBFile> getFiles() {
+        return files;
+    }
 
-	public void setFiles(List<DBFile> files) {
-		this.files = files;
-	}
+    public void setFiles(List<DBFile> files) {
+        this.files = files;
+    }
 
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) { return true; }
-		if (o == null || getClass() != o.getClass()) { return false; }
-		Lead lead = (Lead) o;
-		return id == lead.id &&
-				projectName.equals(lead.projectName) &&
-				projectOwner.equals(lead.projectOwner);
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) { return true; }
+        if (o == null || getClass() != o.getClass()) { return false; }
+        Lead lead = (Lead) o;
+        return id == lead.id &&
+                projectName.equals(lead.projectName) &&
+                projectOwner.equals(lead.projectOwner);
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(id, projectName, projectOwner);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, projectName, projectOwner);
+    }
 }

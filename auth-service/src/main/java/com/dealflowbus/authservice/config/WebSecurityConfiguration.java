@@ -15,40 +15,36 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 
+    private final UserDetailsService userDetailsService;
 
-	private final UserDetailsService userDetailsService;
+    public WebSecurityConfiguration(@Qualifier("userDetailServiceImpl") UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
 
-	public WebSecurityConfiguration(@Qualifier("userDetailServiceImpl") UserDetailsService userDetailsService) {
-		this.userDetailsService = userDetailsService;
-	}
+    @Bean
+    protected AuthenticationManager getAuthenticationManager() throws Exception {
+        return super.authenticationManagerBean();
+    }
 
-	@Bean
-	protected AuthenticationManager getAuthenticationManager() throws Exception {
-		return super.authenticationManagerBean();
-	}
-	
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-	}
-	
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
 
-	@Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-	}
-	
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		
-	//single public entry for health monitoring
-		
-		http
-	    .authorizeRequests()
-	    .antMatchers("/manage/health").permitAll()
-	    .anyRequest().authenticated();
-		
-	
-	}
-	
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+
+        //single public entry for health monitoring
+
+        http
+                .authorizeRequests()
+                .antMatchers("/manage/health").permitAll()
+                .anyRequest().authenticated();
+    }
 }

@@ -19,37 +19,35 @@ import java.util.List;
 @RequestMapping("/api")
 public class NotesController {
 
-	private final DBNoteService noteService;
+    private final DBNoteService noteService;
 
-	public NotesController(DBNoteService noteService) {
-		this.noteService = noteService;
-	}
+    public NotesController(DBNoteService noteService) {
+        this.noteService = noteService;
+    }
 
-	//get list of lead notes
-	@GetMapping("/leads/{id}/notes")
-	@PreAuthorize("hasAuthority('read_lead')")
-	public List<Note> getListOfLeadNotes(@PathVariable int id) {
-		
-		return noteService.getListOfLeadNotes(id);
-		
-	}
+    //get list of lead notes
+    @GetMapping("/leads/{id}/notes")
+    @PreAuthorize("hasAuthority('read_lead')")
+    public List<Note> getListOfLeadNotes(@PathVariable int id) {
 
-	
-	//posting new note
-	@PostMapping("/leads/{id}/notes")
-	@PreAuthorize("hasAuthority('create_lead')")
-	public ResponseEntity<Lead> addNoteToLead(@PathVariable int id, @RequestBody Note note) {
+        return noteService.getListOfLeadNotes(id);
+    }
 
-		return noteService.addNoteToLead(note, id);
-	}
-	
-	
-	//deleting note by id
-	@DeleteMapping("/leads/{id}/notes/{noteId}")
-	@PreAuthorize("hasAuthority('delete_lead')")
-	public String deleteNoteFromLead(@PathVariable int id, @PathVariable int noteId) {
 
-		return noteService.deleteNoteFromLead(id, noteId);
-	}	
-	
+    //posting new note
+    @PostMapping("/leads/{id}/notes")
+    @PreAuthorize("hasAuthority('create_lead')")
+    public ResponseEntity<Lead> addNoteToLead(@PathVariable int id, @RequestBody Note note) {
+
+        return noteService.addNoteToLead(note, id);
+    }
+
+
+    //deleting note by id
+    @DeleteMapping("/leads/{id}/notes/{noteId}")
+    @PreAuthorize("hasAuthority('delete_lead')")
+    public String deleteNoteFromLead(@PathVariable int id, @PathVariable int noteId) {
+
+        return noteService.deleteNoteFromLead(id, noteId);
+    }
 }
