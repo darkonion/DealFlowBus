@@ -1,8 +1,11 @@
 package com.dealflowbus.databasemainreader.services;
 
-import java.io.IOException;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import com.dealflowbus.databasemainreader.exceptions.FileStorageException;
+import com.dealflowbus.databasemainreader.exceptions.MyFileNotFoundException;
+import com.dealflowbus.databasemainreader.models.DBFile;
+import com.dealflowbus.databasemainreader.models.Lead;
+import com.dealflowbus.databasemainreader.models.UploadFileResponse;
+import com.dealflowbus.databasemainreader.repository.DBFileRepository;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -12,22 +15,22 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.dealflowbus.databasemainreader.exceptions.FileStorageException;
-import com.dealflowbus.databasemainreader.exceptions.MyFileNotFoundException;
-import com.dealflowbus.databasemainreader.models.DBFile;
-import com.dealflowbus.databasemainreader.models.Lead;
-import com.dealflowbus.databasemainreader.models.UploadFileResponse;
-import com.dealflowbus.databasemainreader.repository.DBFileRepository;
+import java.io.IOException;
 
 @Service
 public class DBFileService {
 
-	@Autowired
-	private DBFileRepository dbFileRepo;
-	
-	@Autowired
-	private DBLeadService dBLeadService;
-	
+
+	private final DBFileRepository dbFileRepo;
+	private final DBLeadService dBLeadService;
+
+
+	public DBFileService(DBFileRepository dbFileRepo,
+			DBLeadService dBLeadService) {
+		this.dbFileRepo = dbFileRepo;
+		this.dBLeadService = dBLeadService;
+	}
+
 	//uploading new file to lead
 	public UploadFileResponse storeFile(MultipartFile file, int id) {
 		

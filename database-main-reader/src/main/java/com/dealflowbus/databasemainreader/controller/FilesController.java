@@ -1,6 +1,7 @@
 package com.dealflowbus.databasemainreader.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.dealflowbus.databasemainreader.models.UploadFileResponse;
+import com.dealflowbus.databasemainreader.services.DBFileService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,19 +13,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.dealflowbus.databasemainreader.models.UploadFileResponse;
-import com.dealflowbus.databasemainreader.services.DBFileService;
-
 
 @RestController
 @RequestMapping("/api")
 public class FilesController {
 
-	
-	@Autowired
-	private DBFileService fileService;
-	
-	
+	private final DBFileService fileService;
+
+	public FilesController(DBFileService fileService) {
+		this.fileService = fileService;
+	}
+
 	@PostMapping("/leads/{id}/files")
 	@PreAuthorize("hasAuthority('create_lead')")
 	public UploadFileResponse uploadFile(@RequestParam MultipartFile file, @PathVariable int id) {

@@ -1,9 +1,9 @@
 package com.dealflowbus.statisticsunit.statistics;
 
+import com.dealflowbus.statisticsunit.models.Lead;
+
 import java.time.LocalDate;
 import java.util.List;
-
-import com.dealflowbus.statisticsunit.models.Lead;
 
 public class MainEngine {
 	
@@ -12,13 +12,13 @@ public class MainEngine {
 		
 	}
 
-	public static int getCount(List<Lead> leads) {
+	public static int count(List<Lead> leads) {
 		
 		return leads.size();
 		
 	}
 	
-	public static int getCountForgotten(List<Lead> leads) {
+	public static int countForgotten(List<Lead> leads) {
 		LocalDate monthAgo = LocalDate.now().minusMonths(1);
 		int count = 0;
 		
@@ -32,7 +32,7 @@ public class MainEngine {
 		
 	}
 
-	public static int getCountRejected(List<Lead> leads) {
+	public static int countRejected(List<Lead> leads) {
 		int count = 0;
 		
 		for (Lead n : leads) {
@@ -45,7 +45,7 @@ public class MainEngine {
 		return count;
 	}
 
-	public static int getCountPortfolio(List<Lead> leads) {
+	public static int countPortfolio(List<Lead> leads) {
 		int count = 0;
 		
 		for (Lead n : leads) {
@@ -58,7 +58,7 @@ public class MainEngine {
 		return count;
 	}
 
-	public static int getCountInProgress(List<Lead> leads) {
+	public static int countInProgress(List<Lead> leads) {
 		int count = 0;
 		
 		for (Lead n : leads) {
@@ -69,7 +69,7 @@ public class MainEngine {
 		return count;
 	}
 	
-	public static int getCountAddedInThisYear(List<Lead> leads) {
+	public static int countAddedInThisYear(List<Lead> leads) {
 		int count = 0;
 		
 		for (Lead n : leads) {
@@ -80,7 +80,7 @@ public class MainEngine {
 		return count;
 	}
 	
-	public static int getCountAddedInThisMonth(List<Lead> leads) {
+	public static int countAddedInThisMonth(List<Lead> leads) {
 		int count = 0;
 		
 		for (Lead n : leads) {

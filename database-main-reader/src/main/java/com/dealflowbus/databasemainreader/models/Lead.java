@@ -1,21 +1,29 @@
 package com.dealflowbus.databasemainreader.models;
 
 
-		import java.time.LocalDate;
-		import java.util.ArrayList;
-		import java.util.List;
-
-		import javax.persistence.*;
-
-		import javax.validation.constraints.NotNull;
-		import javax.validation.constraints.Size;
-
-		import org.hibernate.annotations.DynamicUpdate;
-		import org.springframework.format.annotation.DateTimeFormat;
-		import org.springframework.format.annotation.DateTimeFormat.ISO;
-
 		import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-		import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.annotation.JsonView;
+import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+		import java.util.Objects;
 
 @DynamicUpdate(true)
 @JsonIgnoreProperties("hibernateLazyInitializer")
@@ -236,28 +244,19 @@ public class Lead {
 		this.files = files;
 	}
 
+
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + id;
-		return result;
+	public boolean equals(Object o) {
+		if (this == o) { return true; }
+		if (o == null || getClass() != o.getClass()) { return false; }
+		Lead lead = (Lead) o;
+		return id == lead.id &&
+				projectName.equals(lead.projectName) &&
+				projectOwner.equals(lead.projectOwner);
 	}
 
 	@Override
-	//if id is equal, entities are equal
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Lead other = (Lead) obj;
-        return id == other.id;
-
-    }
-
-
-
+	public int hashCode() {
+		return Objects.hash(id, projectName, projectOwner);
+	}
 }

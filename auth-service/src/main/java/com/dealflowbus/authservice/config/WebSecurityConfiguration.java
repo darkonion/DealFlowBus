@@ -1,6 +1,6 @@
 package com.dealflowbus.authservice.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,13 +13,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
-	
-	
-	@Autowired
-	private UserDetailsService userDetailsService;
-	
-	
-	
+
+
+
+	private final UserDetailsService userDetailsService;
+
+	public WebSecurityConfiguration(@Qualifier("userDetailServiceImpl") UserDetailsService userDetailsService) {
+		this.userDetailsService = userDetailsService;
+	}
+
 	@Bean
 	protected AuthenticationManager getAuthenticationManager() throws Exception {
 		return super.authenticationManagerBean();
