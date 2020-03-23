@@ -1,11 +1,10 @@
 package com.dealflowbus.databasemainreader.services;
 
-import java.net.URI;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import com.dealflowbus.databasemainreader.exceptions.LeadNotFoundException;
+import com.dealflowbus.databasemainreader.exceptions.WrongHTTPQueryFormula;
+import com.dealflowbus.databasemainreader.models.Detail;
+import com.dealflowbus.databasemainreader.models.Lead;
+import com.dealflowbus.databasemainreader.repository.LeadRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -14,18 +13,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.dealflowbus.databasemainreader.exceptions.LeadNotFoundException;
-import com.dealflowbus.databasemainreader.exceptions.WrongHTTPQueryFormula;
-import com.dealflowbus.databasemainreader.models.Detail;
-import com.dealflowbus.databasemainreader.models.Lead;
-import com.dealflowbus.databasemainreader.repository.LeadRepository;
+import java.net.URI;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DBLeadService {
 	
-	@Autowired
-	private LeadRepository leadRepo;
-	
+
+	private final LeadRepository leadRepo;
+
+	public DBLeadService(LeadRepository leadRepo) {
+		this.leadRepo = leadRepo;
+	}
+
 	//retrieving single lead
 	public Lead retrieveLead(int id) {
 		Optional<Lead> findById = leadRepo.findById(id);

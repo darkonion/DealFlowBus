@@ -2,28 +2,29 @@ package com.dealflowbus.statisticsunit.controller;
 
 
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import com.dealflowbus.statisticsunit.models.Lead;
+import com.dealflowbus.statisticsunit.service.LeadFeignServiceCashing;
+import com.dealflowbus.statisticsunit.statistics.MainEngine;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dealflowbus.statisticsunit.models.Lead;
-import com.dealflowbus.statisticsunit.service.LeadFeignServiceCashing;
-import com.dealflowbus.statisticsunit.statistics.MainEngine;
+import java.util.List;
 
 
 
 @RestController
 public class StatisticsController {
 	
-	@Autowired
-	private LeadFeignServiceCashing lfsc;
-	
+
+	private final LeadFeignServiceCashing lfsc;
 	private List<Lead> list;
-	
+
+
+	public StatisticsController(LeadFeignServiceCashing lfsc) {
+		this.lfsc = lfsc;
+	}
 
 	@GetMapping("/stats/leads")
 	@PreAuthorize("hasAuthority('read_lead')")
@@ -33,19 +34,19 @@ public class StatisticsController {
 		list = lfsc.getLeadList();
 		
 		if (countType == 1) {
-			return MainEngine.getCount(list);
+			return MainEngine.count(list);
 		} else if (countType == 2) {
-			return MainEngine.getCountRejected(list);
+			return MainEngine.countRejected(list);
 		} else if (countType == 3) {
-			return MainEngine.getCountPortfolio(list);
+			return MainEngine.countPortfolio(list);
 		} else if (countType == 4) {
-			return MainEngine.getCountInProgress(list);
+			return MainEngine.countInProgress(list);
 		} else if (countType == 5) {
-			return MainEngine.getCountForgotten(list);
+			return MainEngine.countForgotten(list);
 		} else if (countType == 6) {
-			return MainEngine.getCountAddedInThisMonth(list);
+			return MainEngine.countAddedInThisMonth(list);
 		} else if (countType == 7) {
-			return MainEngine.getCountAddedInThisYear(list);
+			return MainEngine.countAddedInThisYear(list);
 		} else {
 			throw new RuntimeException("Wrong mapping param");
 		}
