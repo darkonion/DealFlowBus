@@ -11,17 +11,15 @@ import java.util.List;
 @Service
 public class LeadFeignServiceCashing {
 
-	private final LeadFeignClient leadFeignClient;
+    private final LeadFeignClient leadFeignClient;
 
-	public LeadFeignServiceCashing(LeadFeignClient leadFeignClient) {
-		this.leadFeignClient = leadFeignClient;
-	}
+    public LeadFeignServiceCashing(LeadFeignClient leadFeignClient) {
+        this.leadFeignClient = leadFeignClient;
+    }
 
-	@Cacheable("leads")
-	public List<Lead> getLeadList() {
+    @Cacheable("leads")
+    public List<Lead> getLeadList() {
 
-		return leadFeignClient.getLeads(AccessToken.getToken());
-
-	}
-	
+        return leadFeignClient.getLeads(AccessToken.getToken());
+    }
 }

@@ -18,35 +18,33 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/api")
 public class FilesController {
 
-	private final DBFileService fileService;
+    private final DBFileService fileService;
 
-	public FilesController(DBFileService fileService) {
-		this.fileService = fileService;
-	}
+    public FilesController(DBFileService fileService) {
+        this.fileService = fileService;
+    }
 
-	@PostMapping("/leads/{id}/files")
-	@PreAuthorize("hasAuthority('create_lead')")
-	public UploadFileResponse uploadFile(@RequestParam MultipartFile file, @PathVariable int id) {
-	
-		return fileService.storeFile(file, id);
-	}
-	
-	@SuppressWarnings("rawtypes")
-	@GetMapping("/files/{fileId}")
-	@PreAuthorize("hasAuthority('read_lead')")
-	public ResponseEntity downloadFile(@PathVariable String fileId) {
-		
-		return fileService.getFile(fileId);
+    @PostMapping("/leads/{id}/files")
+    @PreAuthorize("hasAuthority('create_lead')")
+    public UploadFileResponse uploadFile(@RequestParam MultipartFile file, @PathVariable int id) {
 
-	}
-	
-	@DeleteMapping("/files/{fileId}")
-	@PreAuthorize("hasAuthority('delete_lead')")
-	public String deleteFile(@PathVariable String fileId) {
-		
-		return fileService.deleteFile(fileId);
+        return fileService.storeFile(file, id);
+    }
 
-	}
+    @SuppressWarnings("rawtypes")
+    @GetMapping("/files/{fileId}")
+    @PreAuthorize("hasAuthority('read_lead')")
+    public ResponseEntity downloadFile(@PathVariable String fileId) {
+
+        return fileService.getFile(fileId);
+    }
+
+    @DeleteMapping("/files/{fileId}")
+    @PreAuthorize("hasAuthority('delete_lead')")
+    public String deleteFile(@PathVariable String fileId) {
+
+        return fileService.deleteFile(fileId);
+    }
 }
 
 

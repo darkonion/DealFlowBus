@@ -4,41 +4,36 @@ import java.time.LocalDate;
 
 //currently useless
 public class Note {
-	
-	private String note;
-	private LocalDate issueDate = LocalDate.now();
-	private int noteId;
-	
-	public Note() {
 
-	}
+    private String note;
+    private LocalDate issueDate = LocalDate.now();
+    private int noteId;
 
-	public String getNote() {
-		return note;
-	}
+    public Note() {
 
-	public void setNote(String note) {
-		this.note = note;
-	}
+    }
 
-	public LocalDate getIssueDate() {
-		return issueDate;
-	}
+    public String getNote() {
+        return note;
+    }
 
-	public void setIssueDate(LocalDate issueDate) {
-		this.issueDate = issueDate;
-	}
+    public void setNote(String note) {
+        this.note = note;
+    }
 
-	public int getNoteId() {
-		return noteId;
-	}
+    public LocalDate getIssueDate() {
+        return issueDate;
+    }
 
-	public void setNoteId(int noteId) {
-		this.noteId = noteId;
-	}
-	
-	
-	
-	
+    public void setIssueDate(LocalDate issueDate) {
+        this.issueDate = issueDate;
+    }
 
+    public int getNoteId() {
+        return noteId;
+    }
+
+    public void setNoteId(int noteId) {
+        this.noteId = noteId;
+    }
 }

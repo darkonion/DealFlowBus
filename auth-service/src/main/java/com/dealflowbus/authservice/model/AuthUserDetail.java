@@ -1,72 +1,70 @@
 package com.dealflowbus.authservice.model;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 public class AuthUserDetail extends User implements UserDetails {
 
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -6285257989519937392L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = -6285257989519937392L;
 
-	public AuthUserDetail() {
-	}
+    public AuthUserDetail() {
+    }
 
-	public AuthUserDetail(User user) {
-		super(user);
-	}
+    public AuthUserDetail(User user) {
+        super(user);
+    }
 
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		
-		List<GrantedAuthority> grantedAuthority = new ArrayList<>();
-		
-		getRoles().forEach(role -> {grantedAuthority.add(new SimpleGrantedAuthority(role.getName()));
-			role.getPermissions().forEach(permission -> {grantedAuthority.add(new SimpleGrantedAuthority(permission.getName()));
-			});
-		
-		});
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
 
-		return grantedAuthority;
-	}
-	
-	
+        List<GrantedAuthority> grantedAuthority = new ArrayList<>();
 
-	@Override
-	public String getPassword() {
-		return super.getPassword();
-	}
+        getRoles().forEach(role -> {
+            grantedAuthority.add(new SimpleGrantedAuthority(role.getName()));
+            role.getPermissions().forEach(permission -> {grantedAuthority.add(new SimpleGrantedAuthority(permission.getName()));
+            });
+        });
 
-	@Override
-	public String getUsername() {
-		return super.getUsername();
-	}
+        return grantedAuthority;
+    }
 
-	@Override
-	public boolean isAccountNonExpired() {
-		return super.isAccountNonExpired();
-	}
 
-	@Override
-	public boolean isAccountNonLocked() {
-		return super.isAccountNonLocked();
-	}
+    @Override
+    public String getPassword() {
+        return super.getPassword();
+    }
 
-	@Override
-	public boolean isCredentialsNonExpired() {
-		return super.isCredentialsNonExpired();
-	}
+    @Override
+    public String getUsername() {
+        return super.getUsername();
+    }
 
-	@Override
-	public boolean isEnabled() {
-		return super.isEnabled();
-	}
+    @Override
+    public boolean isAccountNonExpired() {
+        return super.isAccountNonExpired();
+    }
 
+    @Override
+    public boolean isAccountNonLocked() {
+        return super.isAccountNonLocked();
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return super.isCredentialsNonExpired();
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return super.isEnabled();
+    }
 }

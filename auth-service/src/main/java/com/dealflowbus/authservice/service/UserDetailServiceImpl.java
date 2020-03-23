@@ -15,25 +15,23 @@ import java.util.Optional;
 public class UserDetailServiceImpl implements UserDetailsService {
 
 
-	private final UserDetailRepository userDetailRepository;
+    private final UserDetailRepository userDetailRepository;
 
-	public UserDetailServiceImpl(UserDetailRepository userDetailRepository) {
-		this.userDetailRepository = userDetailRepository;
-	}
+    public UserDetailServiceImpl(UserDetailRepository userDetailRepository) {
+        this.userDetailRepository = userDetailRepository;
+    }
 
-	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		
-		Optional<User> optionalUser = userDetailRepository.findByUsername(username);
-		
-		optionalUser.orElseThrow(() -> new UsernameNotFoundException("User or password is wrong"));
-		
-		UserDetails userDetails = new AuthUserDetail(optionalUser.get());
-		
-		new AccountStatusUserDetailsChecker().check(userDetails);
-		
-		return userDetails;
-	}
-	
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
+        Optional<User> optionalUser = userDetailRepository.findByUsername(username);
+
+        optionalUser.orElseThrow(() -> new UsernameNotFoundException("User or password is wrong"));
+
+        UserDetails userDetails = new AuthUserDetail(optionalUser.get());
+
+        new AccountStatusUserDetailsChecker().check(userDetails);
+
+        return userDetails;
+    }
 }

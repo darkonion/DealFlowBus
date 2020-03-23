@@ -17,46 +17,46 @@ import javax.sql.DataSource;
 public class AuthorizationServerConfiguration implements AuthorizationServerConfigurer  {
 
 
-	private final PasswordEncoder passwordEncoder;
-	private final DataSource dataSource;
-	private final AuthenticationManager authenticationManager;
+    private final PasswordEncoder passwordEncoder;
+    private final DataSource dataSource;
+    private final AuthenticationManager authenticationManager;
 
 
-	public AuthorizationServerConfiguration(PasswordEncoder passwordEncoder,
-			DataSource dataSource,
-			AuthenticationManager authenticationManager) {
-		this.passwordEncoder = passwordEncoder;
-		this.dataSource = dataSource;
-		this.authenticationManager = authenticationManager;
-	}
+    public AuthorizationServerConfiguration(PasswordEncoder passwordEncoder,
+            DataSource dataSource,
+            AuthenticationManager authenticationManager) {
+        this.passwordEncoder = passwordEncoder;
+        this.dataSource = dataSource;
+        this.authenticationManager = authenticationManager;
+    }
 
 
-	@Bean
-	public TokenStore jdbcTokenStore() {
-		return new JdbcTokenStore(dataSource);
-	}
+    @Bean
+    public TokenStore jdbcTokenStore() {
+        return new JdbcTokenStore(dataSource);
+    }
 
-	
-	
-	@Override
-	public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
-		security.checkTokenAccess("isAuthenticated()").tokenKeyAccess("permitAll()");
 
-	}
 
-	@Override
-	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-		clients.jdbc(dataSource).passwordEncoder(passwordEncoder);
+    @Override
+    public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
+        security.checkTokenAccess("isAuthenticated()").tokenKeyAccess("permitAll()");
 
-	}
+    }
 
-	@Override
-	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-		endpoints.tokenStore(jdbcTokenStore());
-		endpoints.authenticationManager(authenticationManager);
-		
-	}
-	
-	
+    @Override
+    public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+        clients.jdbc(dataSource).passwordEncoder(passwordEncoder);
+
+    }
+
+    @Override
+    public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+        endpoints.tokenStore(jdbcTokenStore());
+        endpoints.authenticationManager(authenticationManager);
+
+    }
+
+
 
 }
