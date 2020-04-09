@@ -2,7 +2,6 @@ package com.dealflowbus.statisticsunit.feignproxy;
 
 import com.dealflowbus.statisticsunit.models.Lead;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -13,8 +12,5 @@ import java.util.List;
 public interface LeadFeignClient {
 
     @RequestMapping(method = RequestMethod.GET, value = "/api/leadscrude")
-    List<Lead> getLeads(@RequestHeader("Authorization") String token);
-
-    //@RequestMapping(method = RequestMethod.GET, value = "/api/leads/{id}/notes")
-    //List<Note> getNotes(@PathVariable(value = "id") int id);
+    List<Lead> getLeads();
 }

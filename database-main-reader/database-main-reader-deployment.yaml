@@ -32,7 +32,7 @@ spec:
               value: http://auth-service:9191/
             - name: CLOUD_GCP_ENABLED
               value: "true"
-          image: darkonion/database-main-reader:0.2.5-SNAPSHOT
+          image: darkonion/database-main-reader:0.2.6-SNAPSHOT
           name: database-main-reader
           ports:
             - name: liveness-port

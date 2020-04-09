@@ -2,7 +2,7 @@ package com.dealflowbus.statisticsunit.statistics;
 
 import com.dealflowbus.statisticsunit.models.Lead;
 import com.dealflowbus.statisticsunit.models.Statistics;
-import com.dealflowbus.statisticsunit.service.LeadFeignServiceCashing;
+import com.dealflowbus.statisticsunit.service.LeadService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -10,26 +10,27 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+
 @Service
 public class MainEngine {
 
-    private final LeadFeignServiceCashing lfsc;
+    private final LeadService leadService;
 
-    public MainEngine(LeadFeignServiceCashing lfsc) {
-        this.lfsc = lfsc;
+    public MainEngine(LeadService lfsc) {
+        this.leadService = lfsc;
 
     }
 
     public int count() {
 
-        return lfsc.getLeadList().size();
+        return leadService.getLeadList().size();
     }
 
     public int countForgotten() {
         LocalDate monthAgo = LocalDate.now().minusMonths(1);
         int count = 0;
 
-        for (Lead n : lfsc.getLeadList()) {
+        for (Lead n : leadService.getLeadList()) {
             if (!n.isRejected() && !n.isInPortfolio()
                     && monthAgo.isAfter(n.getLastTouched())) {
                 count++;
@@ -41,7 +42,7 @@ public class MainEngine {
     public int countRejected() {
         int count = 0;
 
-        for (Lead n : lfsc.getLeadList()) {
+        for (Lead n : leadService.getLeadList()) {
             if (n.isRejected()) {
                 count++;
             }
@@ -54,7 +55,7 @@ public class MainEngine {
     public int countPortfolio() {
         int count = 0;
 
-        for (Lead n : lfsc.getLeadList()) {
+        for (Lead n : leadService.getLeadList()) {
             if (n.isInPortfolio() && !n.isRejected()) {
                 count++;
             }
@@ -67,7 +68,7 @@ public class MainEngine {
     public int countInProgress() {
         int count = 0;
 
-        for (Lead n : lfsc.getLeadList()) {
+        for (Lead n : leadService.getLeadList()) {
             if (n.isInProgress() && !n.isInPortfolio() && !n.isRejected()) {
                 count++;
             }
@@ -78,7 +79,7 @@ public class MainEngine {
     public int countAddedInThisYear() {
         int count = 0;
 
-        for (Lead n : lfsc.getLeadList()) {
+        for (Lead n : leadService.getLeadList()) {
             if (n.getDateArrival().getYear() == LocalDate.now().getYear()) {
                 count++;
             }
@@ -89,7 +90,7 @@ public class MainEngine {
     public int countAddedInThisMonth() {
         int count = 0;
 
-        for (Lead n : lfsc.getLeadList()) {
+        for (Lead n : leadService.getLeadList()) {
             if (n.getDateArrival().getMonth() == LocalDate.now().getMonth()) {
                 count++;
             }
@@ -100,7 +101,7 @@ public class MainEngine {
     public boolean tendencyRising() {
         int countLastMonth = 0;
         int countTwoMonthsAgo = 0;
-        for (Lead n : lfsc.getLeadList()) {
+        for (Lead n : leadService.getLeadList()) {
             if (n.getDateArrival().getMonth() == LocalDate.now().getMonth().minus(1)) {
                 countLastMonth++;
             }
@@ -112,7 +113,7 @@ public class MainEngine {
     }
 
     public Map<String, Long> countByField() {
-        List<Lead> list = lfsc.getLeadList();
+        List<Lead> list = leadService.getLeadList();
         Map<String, Long> countByField = list.stream()
                 .filter(l -> l.getField() != null)
                 .collect(Collectors.groupingBy(Lead::getField, Collectors.counting()));

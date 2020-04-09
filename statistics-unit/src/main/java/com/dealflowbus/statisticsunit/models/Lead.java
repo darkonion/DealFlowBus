@@ -1,14 +1,15 @@
 package com.dealflowbus.statisticsunit.models;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 
+@Getter
+@Setter
 public class Lead implements Serializable {
 
-
-    /**
-     *
-     */
     private static final long serialVersionUID = 2908116142472869016L;
 
     //only crucial for statistics parameters
@@ -20,7 +21,6 @@ public class Lead implements Serializable {
     private boolean inPortfolio;
 
     public Lead() {
-
     }
 
     public Lead(boolean inProgress, boolean rejected, String field,
@@ -35,54 +35,4 @@ public class Lead implements Serializable {
     }
 
 
-    public boolean isInProgress() {
-        return inProgress;
-    }
-
-    public void setInProgress(boolean inProgress) {
-        this.inProgress = inProgress;
-    }
-
-    public boolean isRejected() {
-        return rejected;
-    }
-
-    public void setRejected(boolean rejected) {
-        this.rejected = rejected;
-    }
-
-    public String getField() {
-        if (field == null) {
-            field = "Other";
-        }
-        return field;
-    }
-
-    public void setField(String field) {
-        this.field = field;
-    }
-
-    public LocalDate getDateArrival() {
-        return dateArrival;
-    }
-
-    public void setDateArrival(LocalDate dateArrival) {
-        this.dateArrival = dateArrival;
-    }
-
-    public LocalDate getLastTouched() {
-        return lastTouched;
-    }
-
-    public void setLastTouched(LocalDate lastTouched) {
-        this.lastTouched = lastTouched;
-    }
-
-    public boolean isInPortfolio() {
-        return inPortfolio;
-    }
-
-    public void setInPortfolio(boolean inPortfolio) {
-        this.inPortfolio = inPortfolio;
-    }
 }

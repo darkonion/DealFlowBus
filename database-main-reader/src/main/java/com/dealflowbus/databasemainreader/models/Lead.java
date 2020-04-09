@@ -3,6 +3,8 @@ package com.dealflowbus.databasemainreader.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonView;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
@@ -22,8 +24,9 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
+@Getter
+@Setter
 @DynamicUpdate(true)
 @JsonIgnoreProperties("hibernateLazyInitializer")
 @Entity
@@ -110,116 +113,12 @@ public class Lead {
         this.extraAddress = extraAddress;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getProjectName() {
-        return projectName;
-    }
-
-    public void setProjectName(String projectName) {
-        this.projectName = projectName;
-    }
-
-    public String getProjectOwner() {
-        return projectOwner;
-    }
-
-    public void setProjectOwner(String projectOwner) {
-        this.projectOwner = projectOwner;
-    }
-
-    public boolean isInProgress() {
-        return inProgress;
-    }
-
-    public void setInProgress(boolean inProgress) {
-        this.inProgress = inProgress;
-    }
-
-    public boolean isRejected() {
-        return rejected;
-    }
-
-    public void setRejected(boolean rejected) {
-        this.rejected = rejected;
-    }
-
-    public Detail getDetail() {
-        return detail;
-    }
-
-    public void setDetail(Detail detail) {
-        this.detail = detail;
-    }
-
-    public String getField() {
-        return field;
-    }
-
-    public void setField(String field) {
-        this.field = field;
-    }
-
-    public LocalDate getDateArrival() {
-        return dateArrival;
-    }
-
-    public void setDateArrival(LocalDate dateArrival) {
-        this.dateArrival = dateArrival;
-    }
-
-    public LocalDate getLastTouched() {
-        return lastTouched;
-    }
-
-    public void setLastTouched(LocalDate lastTouched) {
-        this.lastTouched = lastTouched;
-    }
-
-
-    public List<Note> getNotes() {
-        return notes;
-    }
-
-    public void setNotes(List<Note> notes) {
-        this.notes = notes;
-    }
 
     public void addNote(Note note) {
         if (notes == null) {
             notes = new ArrayList<Note>();
         }
         notes.add(note);
-    }
-
-    public boolean isInPortfolio() {
-        return inPortfolio;
-    }
-
-    public void setInPortfolio(boolean inPortfolio) {
-        this.inPortfolio = inPortfolio;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getExtraAddress() {
-        return extraAddress;
-    }
-
-    public void setExtraAddress(String extraAddress) {
-        this.extraAddress = extraAddress;
     }
 
     public void addFile(DBFile file) {
@@ -229,27 +128,4 @@ public class Lead {
         files.add(file);
     }
 
-    public List<DBFile> getFiles() {
-        return files;
-    }
-
-    public void setFiles(List<DBFile> files) {
-        this.files = files;
-    }
-
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) { return true; }
-        if (o == null || getClass() != o.getClass()) { return false; }
-        Lead lead = (Lead) o;
-        return id == lead.id &&
-                projectName.equals(lead.projectName) &&
-                projectOwner.equals(lead.projectOwner);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, projectName, projectOwner);
-    }
 }

@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>com.dealflowbus</groupId>
 	<artifactId>database-main-reader</artifactId>
-	<version>0.2.5-SNAPSHOT</version>
+	<version>0.2.6-SNAPSHOT</version>
 	<name>database-main-reader</name>
 	<description>Demo project for Spring Boot</description>
 
@@ -74,6 +74,11 @@
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
