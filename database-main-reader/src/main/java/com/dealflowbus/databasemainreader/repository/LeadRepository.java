@@ -36,7 +36,7 @@ public interface LeadRepository extends JpaRepository<Lead, Integer> {
     @Query("SELECT l FROM Lead l where l.inPortfolio=false and l.rejected=false")
     Page<Lead> findAllActiveLeads(Pageable pageable);
 
-    @Query("SELECT l FROM Lead l where LOWER(l.projectName) like LOWER(:query) OR LOWER(l.projectOwner)=LOWER(:query)")
+    @Query("SELECT l FROM Lead l where LOWER(l.projectName) like CONCAT('%', :query, '%') OR LOWER(l.projectOwner) like CONCAT('%', :query, '%')")
     List<Lead> querySearch(String query);
     //---------------------------------------------------------
 }

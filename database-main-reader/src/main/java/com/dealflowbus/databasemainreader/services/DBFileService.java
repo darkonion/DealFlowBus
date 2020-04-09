@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
+import java.time.LocalDate;
 
 @Service
 public class DBFileService {
@@ -57,8 +58,9 @@ public class DBFileService {
                 .toUriString();
 		
 		Lead lead = dBLeadService.retrieveLead(id);
+		lead.setLastTouched(LocalDate.now());
 		lead.addFile(dbFile);
-		dBLeadService.saveLead(lead);
+		dBLeadService.updateLead(lead);
 		
 		return new UploadFileResponse(dbFile.getFileName(), fileDownloadUri, file.getContentType(), file.getSize());
 		

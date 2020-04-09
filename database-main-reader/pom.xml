@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>com.dealflowbus</groupId>
 	<artifactId>database-main-reader</artifactId>
-	<version>0.2.0-SNAPSHOT</version>
+	<version>0.2.5-SNAPSHOT</version>
 	<name>database-main-reader</name>
 	<description>Demo project for Spring Boot</description>
 

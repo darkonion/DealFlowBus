@@ -49,8 +49,8 @@ public class DBLeadService {
 	
 	//query serach, returning list of results
 	public List<Lead> querySearch(String query) {
-		
-		List<Lead> results = leadRepo.querySearch(query);
+
+		List<Lead> results = leadRepo.querySearch(query.toLowerCase().trim());
 		
 		return results;
 	}

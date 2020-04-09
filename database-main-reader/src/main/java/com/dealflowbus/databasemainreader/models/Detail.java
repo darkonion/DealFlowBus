@@ -22,7 +22,7 @@ public class Detail {
     private int descId;
 
     @Column(name = "description")
-    private String description = "";
+    private String description;
 
     @Column(name = "content")
     private String content = "";

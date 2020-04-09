@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>com.dealflowbus</groupId>
 	<artifactId>statistics-unit</artifactId>
-	<version>0.2.0-SNAPSHOT</version>
+	<version>0.2.2-SNAPSHOT</version>
 	<name>statistics-unit</name>
 	<description>Demo project for Spring Boot</description>
 

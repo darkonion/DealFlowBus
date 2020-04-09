@@ -52,6 +52,9 @@ public class Lead implements Serializable {
     }
 
     public String getField() {
+        if (field == null) {
+            field = "Other";
+        }
         return field;
     }
 

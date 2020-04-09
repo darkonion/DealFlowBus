@@ -1,4 +1,4 @@
-FROM openjdk:8
+FROM openjdk:11
 ARG DEPENDENCY=target/dependency
 COPY ${DEPENDENCY}/BOOT-INF/lib /app/lib
 COPY ${DEPENDENCY}/META-INF /app/META-INF

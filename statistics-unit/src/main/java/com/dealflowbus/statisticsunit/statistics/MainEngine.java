@@ -1,27 +1,35 @@
 package com.dealflowbus.statisticsunit.statistics;
 
 import com.dealflowbus.statisticsunit.models.Lead;
+import com.dealflowbus.statisticsunit.models.Statistics;
+import com.dealflowbus.statisticsunit.service.LeadFeignServiceCashing;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
+@Service
 public class MainEngine {
 
+    private final LeadFeignServiceCashing lfsc;
 
-    private MainEngine() {
+    public MainEngine(LeadFeignServiceCashing lfsc) {
+        this.lfsc = lfsc;
 
     }
 
-    public static int count(List<Lead> leads) {
+    public int count() {
 
-        return leads.size();
+        return lfsc.getLeadList().size();
     }
 
-    public static int countForgotten(List<Lead> leads) {
+    public int countForgotten() {
         LocalDate monthAgo = LocalDate.now().minusMonths(1);
         int count = 0;
 
-        for (Lead n : leads) {
+        for (Lead n : lfsc.getLeadList()) {
             if (!n.isRejected() && !n.isInPortfolio()
                     && monthAgo.isAfter(n.getLastTouched())) {
                 count++;
@@ -30,10 +38,10 @@ public class MainEngine {
         return count;
     }
 
-    public static int countRejected(List<Lead> leads) {
+    public int countRejected() {
         int count = 0;
 
-        for (Lead n : leads) {
+        for (Lead n : lfsc.getLeadList()) {
             if (n.isRejected()) {
                 count++;
             }
@@ -43,10 +51,10 @@ public class MainEngine {
         return count;
     }
 
-    public static int countPortfolio(List<Lead> leads) {
+    public int countPortfolio() {
         int count = 0;
 
-        for (Lead n : leads) {
+        for (Lead n : lfsc.getLeadList()) {
             if (n.isInPortfolio() && !n.isRejected()) {
                 count++;
             }
@@ -56,10 +64,10 @@ public class MainEngine {
         return count;
     }
 
-    public static int countInProgress(List<Lead> leads) {
+    public int countInProgress() {
         int count = 0;
 
-        for (Lead n : leads) {
+        for (Lead n : lfsc.getLeadList()) {
             if (n.isInProgress() && !n.isInPortfolio() && !n.isRejected()) {
                 count++;
             }
@@ -67,10 +75,10 @@ public class MainEngine {
         return count;
     }
 
-    public static int countAddedInThisYear(List<Lead> leads) {
+    public int countAddedInThisYear() {
         int count = 0;
 
-        for (Lead n : leads) {
+        for (Lead n : lfsc.getLeadList()) {
             if (n.getDateArrival().getYear() == LocalDate.now().getYear()) {
                 count++;
             }
@@ -78,10 +86,10 @@ public class MainEngine {
         return count;
     }
 
-    public static int countAddedInThisMonth(List<Lead> leads) {
+    public int countAddedInThisMonth() {
         int count = 0;
 
-        for (Lead n : leads) {
+        for (Lead n : lfsc.getLeadList()) {
             if (n.getDateArrival().getMonth() == LocalDate.now().getMonth()) {
                 count++;
             }
@@ -89,10 +97,10 @@ public class MainEngine {
         return count;
     }
 
-    public static boolean tendencyRising(List<Lead> leads) {
+    public boolean tendencyRising() {
         int countLastMonth = 0;
         int countTwoMonthsAgo = 0;
-        for (Lead n : leads) {
+        for (Lead n : lfsc.getLeadList()) {
             if (n.getDateArrival().getMonth() == LocalDate.now().getMonth().minus(1)) {
                 countLastMonth++;
             }
@@ -102,6 +110,39 @@ public class MainEngine {
         }
         return countLastMonth > countTwoMonthsAgo;
     }
+
+    public Map<String, Long> countByField() {
+        List<Lead> list = lfsc.getLeadList();
+        Map<String, Long> countByField = list.stream()
+                .filter(l -> l.getField() != null)
+                .collect(Collectors.groupingBy(Lead::getField, Collectors.counting()));
+
+        return countByField;
+    }
+
+    public Statistics getStatistics() {
+        Statistics stats = new Statistics();
+        stats.setCountTotal(count());
+        stats.setCountProgress(countInProgress());
+        stats.setCountPortfolio(countPortfolio());
+        stats.setCountForgotten(countForgotten());
+        stats.setCountRejected(countRejected());
+        stats.setCountAddedThisMonth(countAddedInThisMonth());
+        stats.setCountAddedThisYear(countAddedInThisYear());
+        stats.setCountByField(countByField());
+
+        if (tendencyRising()) {
+            stats.setTrend("Rising trend");
+        } else {
+            stats.setTrend("Downward trend");
+        }
+
+        return stats;
+
+    }
+
+
+
 }
 
 

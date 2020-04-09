@@ -19,7 +19,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,19 +33,16 @@ public class Lead {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView(LeadViews.List.class)
     @Column(name = "id")
     private int id;
 
     @NotNull
-    @Size(min = 2, message = "Name should be at least 2 characters long")
-    @Size(max = 40, message = "Too long name, max 40 characters")
     @JsonView(LeadViews.List.class)
     @Column(name = "project_name")
     private String projectName;
 
     @NotNull
-    @Size(min = 2, message = "Owner should be at least 2 characters long")
-    @Size(max = 40, message = "Too long name of Owner, max 40 characters")
     @JsonView(LeadViews.List.class)
     @Column(name = "project_owner")
     private String projectOwner;
@@ -76,7 +72,7 @@ public class Lead {
     @Column(name = "in_portfolio")
     private boolean inPortfolio;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "descr_id")
     private Detail detail;
 
@@ -109,7 +105,6 @@ public class Lead {
         this.inProgress = false;
         this.rejected = false;
         this.inPortfolio = false;
-        this.detail = new Detail();
         this.field = field;
         this.email = email;
         this.extraAddress = extraAddress;

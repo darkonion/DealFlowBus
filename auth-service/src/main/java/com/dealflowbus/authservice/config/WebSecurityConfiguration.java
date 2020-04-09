@@ -17,9 +17,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService userDetailsService;
 
-    public WebSecurityConfiguration(@Qualifier("userDetailServiceImpl") UserDetailsService userDetailsService) {
-        this.userDetailsService = userDetailsService;
-    }
+    public WebSecurityConfiguration(
+            @Qualifier("userDetailServiceImpl") UserDetailsService userDetailsService) {this.userDetailsService = userDetailsService;}
 
     @Bean
     protected AuthenticationManager getAuthenticationManager() throws Exception {
@@ -45,6 +44,11 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/manage/health").permitAll()
-                .anyRequest().authenticated();
+                .antMatchers("/oauth/**").permitAll()
+                .antMatchers("/login").permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .formLogin().permitAll();
+
     }
 }

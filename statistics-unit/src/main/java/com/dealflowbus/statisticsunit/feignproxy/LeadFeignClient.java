@@ -12,7 +12,6 @@ import java.util.List;
 @FeignClient(name = "database-main-reader", url = "${DATABASE_MAIN_READER_URI:http://localhost}:8081")
 public interface LeadFeignClient {
 
-
     @RequestMapping(method = RequestMethod.GET, value = "/api/leadscrude")
     List<Lead> getLeads(@RequestHeader("Authorization") String token);
 

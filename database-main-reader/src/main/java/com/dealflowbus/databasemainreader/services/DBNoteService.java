@@ -41,7 +41,7 @@ public class DBNoteService {
 			
 		lead.addNote(note);
 
-		return dBLeadService.saveLead(lead);
+		return dBLeadService.updateLead(lead);
 
 	}
 	
