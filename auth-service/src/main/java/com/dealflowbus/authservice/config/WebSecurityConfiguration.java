@@ -39,8 +39,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        //single public entry for health monitoring
-
         http
                 .authorizeRequests()
                 .antMatchers("/manage/health").permitAll()

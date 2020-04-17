@@ -8,6 +8,7 @@ import org.springframework.security.oauth2.config.annotation.configurers.ClientD
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 
@@ -30,13 +31,10 @@ public class AuthorizationServerConfiguration implements AuthorizationServerConf
         this.authenticationManager = authenticationManager;
     }
 
-
     @Bean
     public TokenStore jdbcTokenStore() {
         return new JdbcTokenStore(dataSource);
     }
-
-
 
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
@@ -52,11 +50,15 @@ public class AuthorizationServerConfiguration implements AuthorizationServerConf
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+
+        DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
+        defaultTokenServices.setTokenStore(jdbcTokenStore());
+        defaultTokenServices.setSupportRefreshToken(true);
+        defaultTokenServices.setClientDetailsService(endpoints.getClientDetailsService());
+
         endpoints.tokenStore(jdbcTokenStore());
+        endpoints.tokenServices(defaultTokenServices);
         endpoints.authenticationManager(authenticationManager);
 
     }
-
-
-
 }

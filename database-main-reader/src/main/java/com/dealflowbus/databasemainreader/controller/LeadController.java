@@ -49,7 +49,7 @@ public class LeadController {
     @PreAuthorize("hasAuthority('read_lead')")
     public List<Lead> querySearch(@RequestParam(value = "query") String query) {
 
-        return dBLeadService.querySearch(query);
+        return dBLeadService.querySearch(query.toLowerCase().trim());
     }
 
 

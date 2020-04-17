@@ -11,6 +11,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -26,11 +27,8 @@ public class Detail {
     @Column(name = "id_description")
     private int descId;
 
-    @Column(name = "description")
+    @Lob
     private String description;
-
-    @Column(name = "content")
-    private String content = "";
 
     @JsonIgnore
     @OneToOne(mappedBy = "detail", fetch = FetchType.LAZY)
@@ -39,8 +37,8 @@ public class Detail {
     public Detail() {
     }
 
-    public Detail(String description, String content) {
+    public Detail(String description) {
         this.description = description;
-        this.content = content;
+
     }
 }

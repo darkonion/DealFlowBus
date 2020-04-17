@@ -13,7 +13,6 @@ import java.util.List;
 @Service
 public class DBNoteService {
 
-
 	private final DBLeadService dBLeadService;
 	private final NoteRepository noteRepo;
 
@@ -38,8 +37,8 @@ public class DBNoteService {
 		Lead lead = dBLeadService.retrieveLead(id);
 		lead.setLastTouched(LocalDate.now());
 		note.setIssueDate(LocalDate.now());
-			
-		lead.addNote(note);
+
+		lead.getNotes().add(note);
 
 		return dBLeadService.updateLead(lead);
 

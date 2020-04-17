@@ -1,5 +1,6 @@
 package com.dealflowbus.databasemainreader.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
@@ -25,12 +26,12 @@ public class DBFile {
     private String fileType;
 
     @Lob
+    @JsonIgnore
     private byte[] data;
 
 
     public DBFile() {
     }
-
 
     public DBFile(String fileName, String fileType, byte[] data) {
         this.fileName = fileName;

@@ -6,6 +6,7 @@ import com.dealflowbus.statisticsunit.service.LeadService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -28,87 +29,63 @@ public class MainEngine {
 
     public int countForgotten() {
         LocalDate monthAgo = LocalDate.now().minusMonths(1);
-        int count = 0;
 
-        for (Lead n : leadService.getLeadList()) {
-            if (!n.isRejected() && !n.isInPortfolio()
-                    && monthAgo.isAfter(n.getLastTouched())) {
-                count++;
-            }
-        }
-        return count;
+        return (int) leadService.getLeadList().stream()
+                .filter(l -> !l.isRejected() && !l.isInPortfolio() && monthAgo.isAfter(l.getLastTouched()))
+                .count();
     }
 
     public int countRejected() {
-        int count = 0;
 
-        for (Lead n : leadService.getLeadList()) {
-            if (n.isRejected()) {
-                count++;
-            }
-        }
-
-
-        return count;
+        return (int) leadService.getLeadList().stream()
+                .filter(l -> l.isRejected())
+                .count();
     }
 
     public int countPortfolio() {
-        int count = 0;
 
-        for (Lead n : leadService.getLeadList()) {
-            if (n.isInPortfolio() && !n.isRejected()) {
-                count++;
-            }
-        }
-
-
-        return count;
+        return (int) leadService.getLeadList().stream()
+                .filter(l -> l.isInPortfolio())
+                .count();
     }
 
     public int countInProgress() {
-        int count = 0;
 
-        for (Lead n : leadService.getLeadList()) {
-            if (n.isInProgress() && !n.isInPortfolio() && !n.isRejected()) {
-                count++;
-            }
-        }
-        return count;
+        return (int) leadService.getLeadList().stream()
+                .filter(l -> l.isInProgress() && !l.isInPortfolio() && !l.isRejected()).count();
     }
 
     public int countAddedInThisYear() {
-        int count = 0;
 
-        for (Lead n : leadService.getLeadList()) {
-            if (n.getDateArrival().getYear() == LocalDate.now().getYear()) {
-                count++;
-            }
+        int thisYear = LocalDate.now().getYear();
+
+        return (int) leadService.getLeadList().stream()
+                .filter(l -> l.getDateArrival().getYear() == thisYear)
+                .count();
         }
-        return count;
-    }
 
     public int countAddedInThisMonth() {
-        int count = 0;
 
-        for (Lead n : leadService.getLeadList()) {
-            if (n.getDateArrival().getMonth() == LocalDate.now().getMonth()) {
-                count++;
-            }
-        }
-        return count;
+        Month currentMonth = LocalDate.now().getMonth();
+
+        return (int) leadService.getLeadList().stream()
+                .filter(l -> l.getDateArrival().getMonth() == currentMonth)
+                .count();
     }
 
     public boolean tendencyRising() {
-        int countLastMonth = 0;
-        int countTwoMonthsAgo = 0;
-        for (Lead n : leadService.getLeadList()) {
-            if (n.getDateArrival().getMonth() == LocalDate.now().getMonth().minus(1)) {
-                countLastMonth++;
-            }
-            if (n.getDateArrival().getMonth() == LocalDate.now().getMonth().minus(2)) {
-                countTwoMonthsAgo++;
-            }
-        }
+
+        Month lastMonth = LocalDate.now().getMonth().minus(1);
+        Month twoMonthsAgo = LocalDate.now().getMonth().minus(2);
+
+        int countLastMonth = (int) leadService.getLeadList().stream()
+                .filter(l -> l.getDateArrival().getMonth() == lastMonth)
+                .count();
+
+        int countTwoMonthsAgo = (int) leadService.getLeadList().stream()
+                .filter(l -> l.getDateArrival().getMonth() == twoMonthsAgo)
+                .count();
+
         return countLastMonth > countTwoMonthsAgo;
     }
 

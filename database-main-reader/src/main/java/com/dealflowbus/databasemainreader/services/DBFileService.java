@@ -36,16 +36,13 @@ public class DBFileService {
 	public UploadFileResponse storeFile(MultipartFile file, int id) {
 		
 		String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-		
 		DBFile dbFile;
 
 		try {
 			if (fileName.contains("..")) {
 				throw new FileStorageException("Sorry! Filename contains invalid path sequence " + fileName);
 			}
-			
 			dbFile = new DBFile(fileName, file.getContentType(), file.getBytes());
-			
 			dbFileRepo.save(dbFile);
 			
 		} catch (IOException e) {
@@ -59,7 +56,7 @@ public class DBFileService {
 		
 		Lead lead = dBLeadService.retrieveLead(id);
 		lead.setLastTouched(LocalDate.now());
-		lead.addFile(dbFile);
+		lead.getFiles().add(dbFile);
 		dBLeadService.updateLead(lead);
 		
 		return new UploadFileResponse(dbFile.getFileName(), fileDownloadUri, file.getContentType(), file.getSize());

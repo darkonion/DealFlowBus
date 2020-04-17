@@ -47,10 +47,10 @@ public class DBLeadService {
 		return leadRepo.findAllByOrderByLastTouchedDesc();
 	}
 	
-	//query serach, returning list of results
+	//query search, returning list of results
 	public List<Lead> querySearch(String query) {
 
-		List<Lead> results = leadRepo.querySearch(query.toLowerCase().trim());
+		List<Lead> results = leadRepo.querySearch(query);
 		
 		return results;
 	}
@@ -77,7 +77,6 @@ public class DBLeadService {
 		} else if (filter == 5) {
 			return leadRepo.findAll(pageable);
 		} else {
-				//maybe it is worth to hardcode here Hystrix formula
 				throw new WrongHTTPQueryFormula("Mapping parameters were wrong");
 		}
 
