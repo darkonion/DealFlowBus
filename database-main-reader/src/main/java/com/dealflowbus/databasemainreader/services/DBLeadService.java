@@ -50,7 +50,7 @@ public class DBLeadService {
 	//query search, returning list of results
 	public List<Lead> querySearch(String query) {
 
-		List<Lead> results = leadRepo.querySearch(query);
+		List<Lead> results = leadRepo.findByProjectNameIgnoreCaseContainingOrProjectOwnerIgnoreCaseContaining(query, query);
 		
 		return results;
 	}
@@ -67,13 +67,13 @@ public class DBLeadService {
 		}
 		
 		if (filter == 1) {
-			return leadRepo.findAllKicked(pageable);
+			return leadRepo.findByRejectedTrue(pageable);
 		} else if (filter == 2) {
-			return leadRepo.findAllInPortfolio(pageable);
+			return leadRepo.findByInPortfolioTrue(pageable);
 		} else if (filter == 3) {
-			return leadRepo.findAllInProgress(pageable);
+			return leadRepo.findByInProgressTrueAndRejectedFalse(pageable);
 		} else if (filter == 4) {
-			return leadRepo.findAllActiveLeads(pageable);
+			return leadRepo.findByInPortfolioFalseAndRejectedFalse(pageable);
 		} else if (filter == 5) {
 			return leadRepo.findAll(pageable);
 		} else {

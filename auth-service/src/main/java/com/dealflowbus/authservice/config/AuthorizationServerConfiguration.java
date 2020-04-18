@@ -1,6 +1,5 @@
 package com.dealflowbus.authservice.config;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -9,8 +8,6 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
-import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 
 import javax.sql.DataSource;
 
@@ -20,45 +17,39 @@ public class AuthorizationServerConfiguration implements AuthorizationServerConf
 
     private final PasswordEncoder passwordEncoder;
     private final DataSource dataSource;
+    private final AppConfig appConfig;
     private final AuthenticationManager authenticationManager;
 
 
     public AuthorizationServerConfiguration(PasswordEncoder passwordEncoder,
             DataSource dataSource,
-            AuthenticationManager authenticationManager) {
+            AppConfig appConfig, AuthenticationManager authenticationManager) {
         this.passwordEncoder = passwordEncoder;
         this.dataSource = dataSource;
+        this.appConfig = appConfig;
         this.authenticationManager = authenticationManager;
-    }
-
-    @Bean
-    public TokenStore jdbcTokenStore() {
-        return new JdbcTokenStore(dataSource);
     }
 
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
         security.checkTokenAccess("isAuthenticated()").tokenKeyAccess("permitAll()");
-
     }
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.jdbc(dataSource).passwordEncoder(passwordEncoder);
-
     }
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
 
         DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
-        defaultTokenServices.setTokenStore(jdbcTokenStore());
+        defaultTokenServices.setTokenStore(appConfig.jdbcTokenStore());
         defaultTokenServices.setSupportRefreshToken(true);
         defaultTokenServices.setClientDetailsService(endpoints.getClientDetailsService());
 
-        endpoints.tokenStore(jdbcTokenStore());
+        endpoints.tokenStore(appConfig.jdbcTokenStore());
         endpoints.tokenServices(defaultTokenServices);
         endpoints.authenticationManager(authenticationManager);
-
     }
 }

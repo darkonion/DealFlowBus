@@ -5,7 +5,6 @@ import com.dealflowbus.databasemainreader.models.Lead;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -14,29 +13,22 @@ import java.util.List;
 @Repository
 public interface LeadRepository extends JpaRepository<Lead, Integer> {
 
-
     // MUST HAVE FOR STATISTICS -------------------------------
-    List<Lead> findAllByOrderByLastTouchedAsc();
-
     List<Lead> findAllByOrderByLastTouchedDesc();
-    //---------------------------------------------------------
+
 
     //FOR WEB GUI ---------------------------------------------
     Page<Lead> findAll(Pageable pageable);
 
-    @Query("SELECT l FROM Lead l where l.rejected=true")
-    Page<Lead> findAllKicked(Pageable pageable);
+    Page<Lead> findByRejectedTrue(Pageable pageable);
 
-    @Query("SELECT l FROM Lead l where l.inPortfolio=true")
-    Page<Lead> findAllInPortfolio(Pageable pageable);
+    Page<Lead> findByInPortfolioTrue(Pageable pageable);
 
-    @Query("SELECT l FROM Lead l where l.inProgress=true and l.rejected=false")
-    Page<Lead> findAllInProgress(Pageable pageable);
+    Page<Lead> findByInProgressTrueAndRejectedFalse(Pageable pageable);
 
-    @Query("SELECT l FROM Lead l where l.inPortfolio=false and l.rejected=false")
-    Page<Lead> findAllActiveLeads(Pageable pageable);
+    Page<Lead> findByInPortfolioFalseAndRejectedFalse(Pageable pageable);
 
-    @Query("SELECT l FROM Lead l where LOWER(l.projectName) like CONCAT('%', :query, '%') OR LOWER(l.projectOwner) like CONCAT('%', :query, '%')")
-    List<Lead> querySearch(String query);
-    //---------------------------------------------------------
+    List<Lead> findByProjectNameIgnoreCaseContainingOrProjectOwnerIgnoreCaseContaining(String projectName,
+            String projectOwner);
+
 }
