@@ -4,6 +4,8 @@ First Venture DealFlow toolset
 
 Private project CRM strictly dedicated to investment funds. Keeping leads, making dynamics statistics, filtering. Spring Cloud Microservice Architecture. 
 
+Main features: Full CRUD operations, dynamic statictics, dedicated OAuth2 server, fully secure, cloud, input verification, hystix failure protection and many more.
+
 Screenshots:
 
 Main List View:
