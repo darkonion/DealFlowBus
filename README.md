@@ -10,7 +10,7 @@ Screenshots:
 
 Main List View:
 ![alt text](https://i.imgur.com/y51YN7l.png)
-![alt text](https://imgur.com/mFf6idC)
+![alt text](https://imgur.com/mFf6idC.png)
 
 Statictics View:
 ![alt text](https://i.imgur.com/v5iFlAU.png)
