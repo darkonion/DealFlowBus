@@ -8,6 +8,9 @@ Main features: Full CRUD operations, dynamic statictics, dedicated OAuth2 server
 
 Screenshots:
 
+Login:
+![alt text](https://i.imgur.com/MUftqXU.png)
+
 Main List View:
 ![alt text](https://i.imgur.com/y51YN7l.png)
 ![alt text](https://imgur.com/mFf6idC.png)
@@ -20,6 +23,3 @@ Single Lead Page View:
 
 Adding new Lead:
 ![alt text](https://i.imgur.com/pE4SHmh.png)
-
-Login: 
-![alt text](https://imgur.com/FFXcUDG.png)
