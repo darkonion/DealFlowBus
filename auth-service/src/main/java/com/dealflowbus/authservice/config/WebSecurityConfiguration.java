@@ -25,6 +25,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
@@ -46,7 +47,12 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .formLogin().permitAll();
+                .formLogin()
+                .loginPage("/login")
+                .defaultSuccessUrl("http://35.239.80.163:8080/api/")
+                .permitAll();
 
     }
+
+
 }

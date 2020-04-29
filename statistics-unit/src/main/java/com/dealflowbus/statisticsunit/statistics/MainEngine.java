@@ -19,7 +19,6 @@ public class MainEngine {
 
     public MainEngine(LeadService lfsc) {
         this.leadService = lfsc;
-
     }
 
     public int count() {
@@ -28,6 +27,7 @@ public class MainEngine {
     }
 
     public int countForgotten() {
+
         LocalDate monthAgo = LocalDate.now().minusMonths(1);
 
         return (int) leadService.getLeadList().stream()
@@ -62,7 +62,7 @@ public class MainEngine {
         return (int) leadService.getLeadList().stream()
                 .filter(l -> l.getDateArrival().getYear() == thisYear)
                 .count();
-        }
+    }
 
     public int countAddedInThisMonth() {
 
@@ -90,6 +90,7 @@ public class MainEngine {
     }
 
     public Map<String, Long> countByField() {
+
         List<Lead> list = leadService.getLeadList();
         Map<String, Long> countByField = list.stream()
                 .filter(l -> l.getField() != null)
@@ -99,6 +100,7 @@ public class MainEngine {
     }
 
     public Statistics getStatistics() {
+
         Statistics stats = new Statistics();
         stats.setCountTotal(count());
         stats.setCountProgress(countInProgress());
@@ -116,13 +118,5 @@ public class MainEngine {
         }
 
         return stats;
-
     }
-
-
-
 }
-
-
-
-

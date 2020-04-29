@@ -39,7 +39,7 @@ spec:
           value: http://database-main-reader
         - name: CLOUD_GCP_ENABLED
           value: "true"
-        image: darkonion/statistics-unit:0.2.3-SNAPSHOT
+        image: darkonion/statistics-unit:0.2.5-SNAPSHOT
         name: statistics-unit
         ports:
         - name: liveness-port

@@ -1,5 +1,6 @@
 package com.dealflowbus.authservice.controller;
 
+import com.dealflowbus.authservice.config.AppConfig;
 import com.dealflowbus.authservice.config.AuthorizationServerConfiguration;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
@@ -16,9 +17,12 @@ public class LogoutController {
 
 
     private final AuthorizationServerConfiguration authorizationServerConfiguration;
+    private final AppConfig appConfig;
 
-    public LogoutController(AuthorizationServerConfiguration authorizationServerConfiguration) {
+    public LogoutController(AuthorizationServerConfiguration authorizationServerConfiguration,
+            AppConfig appConfig) {
         this.authorizationServerConfiguration = authorizationServerConfiguration;
+        this.appConfig = appConfig;
     }
 
     @RequestMapping(value = "oauth/logmeout", method = RequestMethod.GET)
@@ -31,12 +35,16 @@ public class LogoutController {
         if (authHeader != null) {
             String token = authHeader.replace("bearer", "").trim();
 
-            TokenStore tokenStore = authorizationServerConfiguration.jdbcTokenStore();
+            TokenStore tokenStore = appConfig.jdbcTokenStore();
 
             OAuth2AccessToken oAuth2AccessToken = tokenStore.readAccessToken(token);
-            //OAuth2RefreshToken oAuth2RefreshToken = tokenStore.readRefreshToken(token);
             tokenStore.removeAccessToken(oAuth2AccessToken);
-            //tokenStore.removeRefreshToken(oAuth2RefreshToken);
         }
+    }
+
+    @RequestMapping("/login")
+    public String loginPage() {
+
+        return "login";
     }
 }

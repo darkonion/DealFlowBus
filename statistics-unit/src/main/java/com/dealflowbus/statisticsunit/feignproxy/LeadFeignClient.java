@@ -8,7 +8,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import java.util.List;
 
 
-@FeignClient(name = "database-main-reader", url = "${DATABASE_MAIN_READER_URI:http://localhost}:8081")
+@FeignClient(name = "database-main-reader", url = "${DATABASE_MAIN_READER_URI:http://localhost}:8081",
+        fallback = LeadFeignClientHystrixFallback.class)
 public interface LeadFeignClient {
 
     @RequestMapping(method = RequestMethod.GET, value = "/api/leadscrude")

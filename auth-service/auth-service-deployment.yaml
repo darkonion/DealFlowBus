@@ -20,7 +20,7 @@ spec:
               name: auth-service
         - name: CLOUD_GCP_ENABLED
           value: "true"
-        image: darkonion/auth-service:0.2.5-SNAPSHOT
+        image: darkonion/auth-service:0.2.7-SNAPSHOT
         name: auth-service
         ports:
         - name: liveness-port

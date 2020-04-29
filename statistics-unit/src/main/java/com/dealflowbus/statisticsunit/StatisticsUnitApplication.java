@@ -1,15 +1,16 @@
 package com.dealflowbus.statisticsunit;
 
+import brave.sampler.Sampler;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 
-import brave.sampler.Sampler;
-
 @EnableFeignClients
+@EnableHystrix
 @SpringBootApplication
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableResourceServer

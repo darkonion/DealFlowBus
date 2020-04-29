@@ -1,12 +1,1 @@
-server:  port: 8100
-
-spring:
-  application:
-    name: statistics-unit      sleuth:    sampler:      probability: 0.25    cloud:    gcp:      trace:        enabled: ${CLOUD_GCP_ENABLED:false}
-    
-feign:
-  client:
-    config:
-      default:
-        connectTimeout: 10000
-        readTimeout: 10000         #ribbon:#  ConnectTimeout: 60000#  ReadTimeout: 60000  management:  endpoints:    web:      base-path: /manage      exposure:        include: "*"       security:     oauth2:    resource:      token-info-uri: ${OAUTH_SERVICE_URI:http://localhost:9191}/uaa/oauth/check_token    client:      client-id: ${OAUTH_ID:webgui}      client-secret: ${OAUTH_SECRET:demopass1234}#logging:#  level:#    root: debug
+server:  port: 8100spring:  application:    name: statistics-unit      sleuth:    sampler:      probability: 0.25    cloud:    gcp:      trace:        enabled: ${CLOUD_GCP_ENABLED:false}    feign:  hystrix:    enabled: true  client:    config:      default:        connectTimeout: 10000        readTimeout: 10000  management:  endpoints:    web:      base-path: /manage      exposure:        include: "*"       security:     oauth2:    resource:      token-info-uri: ${OAUTH_SERVICE_URI:http://localhost:9191}/uaa/oauth/check_token    client:      client-id: ${OAUTH_ID:webgui}      client-secret: ${OAUTH_SECRET:demopass1234}hystrix:  shareSecurityContext: true  command:    default:      execution:        isolation:          strategy: SEMAPHORE        timeout:          enabled: false#logging:#  level:#    root: debug
