@@ -1,8 +1,11 @@
 package com.dealflowbus.databasemainreader.services;
 
-import java.io.IOException;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import com.dealflowbus.databasemainreader.exceptions.FileStorageException;
+import com.dealflowbus.databasemainreader.exceptions.MyFileNotFoundException;
+import com.dealflowbus.databasemainreader.models.DBFile;
+import com.dealflowbus.databasemainreader.models.Lead;
+import com.dealflowbus.databasemainreader.models.UploadFileResponse;
+import com.dealflowbus.databasemainreader.repository.DBFileRepository;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -12,36 +15,34 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.dealflowbus.databasemainreader.exceptions.FileStorageException;
-import com.dealflowbus.databasemainreader.exceptions.MyFileNotFoundException;
-import com.dealflowbus.databasemainreader.models.DBFile;
-import com.dealflowbus.databasemainreader.models.Lead;
-import com.dealflowbus.databasemainreader.models.UploadFileResponse;
-import com.dealflowbus.databasemainreader.repository.DBFileRepository;
+import java.io.IOException;
+import java.time.LocalDate;
 
 @Service
 public class DBFileService {
 
-	@Autowired
-	private DBFileRepository dbFileRepo;
-	
-	@Autowired
-	private DBLeadService dBLeadService;
-	
+
+	private final DBFileRepository dbFileRepo;
+	private final DBLeadService dBLeadService;
+
+
+	public DBFileService(DBFileRepository dbFileRepo,
+			DBLeadService dBLeadService) {
+		this.dbFileRepo = dbFileRepo;
+		this.dBLeadService = dBLeadService;
+	}
+
 	//uploading new file to lead
 	public UploadFileResponse storeFile(MultipartFile file, int id) {
 		
 		String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-		
 		DBFile dbFile;
 
 		try {
 			if (fileName.contains("..")) {
 				throw new FileStorageException("Sorry! Filename contains invalid path sequence " + fileName);
 			}
-			
 			dbFile = new DBFile(fileName, file.getContentType(), file.getBytes());
-			
 			dbFileRepo.save(dbFile);
 			
 		} catch (IOException e) {
@@ -54,8 +55,9 @@ public class DBFileService {
                 .toUriString();
 		
 		Lead lead = dBLeadService.retrieveLead(id);
-		lead.addFile(dbFile);
-		dBLeadService.saveLead(lead);
+		lead.setLastTouched(LocalDate.now());
+		lead.getFiles().add(dbFile);
+		dBLeadService.updateLead(lead);
 		
 		return new UploadFileResponse(dbFile.getFileName(), fileDownloadUri, file.getContentType(), file.getSize());
 		

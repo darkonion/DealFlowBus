@@ -1,6 +1,6 @@
 package com.dealflowbus.authservice.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,40 +13,46 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
-	
-	
-	@Autowired
-	private UserDetailsService userDetailsService;
-	
-	
-	
-	@Bean
-	protected AuthenticationManager getAuthenticationManager() throws Exception {
-		return super.authenticationManagerBean();
-	}
-	
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-	}
-	
 
-	@Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-	}
-	
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		
-	//single public entry for health monitoring
-		
-		http
-	    .authorizeRequests()
-	    .antMatchers("/manage/health").permitAll()
-	    .anyRequest().authenticated();
-		
-	
-	}
-	
+
+    private final UserDetailsService userDetailsService;
+
+    public WebSecurityConfiguration(
+            @Qualifier("userDetailServiceImpl") UserDetailsService userDetailsService) {this.userDetailsService = userDetailsService;}
+
+    @Bean
+    protected AuthenticationManager getAuthenticationManager() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
+
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+
+        http
+                .authorizeRequests()
+                .antMatchers("/manage/health").permitAll()
+                .antMatchers("/oauth/**").permitAll()
+                .antMatchers("/login").permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .formLogin()
+                .loginPage("/login")
+                .defaultSuccessUrl("http://35.239.80.163:8080/api/")
+                .permitAll();
+
+    }
+
+
 }

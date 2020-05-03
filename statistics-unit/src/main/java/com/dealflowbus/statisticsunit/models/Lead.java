@@ -1,87 +1,38 @@
 package com.dealflowbus.statisticsunit.models;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 
+@Getter
+@Setter
 public class Lead implements Serializable {
 
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 2908116142472869016L;
-	
-	//only crucial for statistics parameters
-	private boolean inProgress;
-	private boolean rejected;
-	private String field;
-	private LocalDate dateArrival;
-	private LocalDate lastTouched;
-	private boolean inPortfolio;
+    private static final long serialVersionUID = 2908116142472869016L;
 
-	public Lead() {
-		
-	}
-	
-	public Lead(boolean inProgress, boolean rejected, String field,
-			LocalDate dateArrival, LocalDate lastTouched, boolean inPortfolio) {
-		
-		this.inProgress = inProgress;
-		this.rejected = rejected;
-		this.field = field;
-		this.dateArrival = dateArrival;
-		this.lastTouched = lastTouched;
-		this.inPortfolio = inPortfolio;
-	}
+    //only crucial for statistics parameters
+    private boolean inProgress;
+    private boolean rejected;
+    private String field;
+    private LocalDate dateArrival;
+    private LocalDate lastTouched;
+    private boolean inPortfolio;
 
-	
-	public boolean isInProgress() {
-		return inProgress;
-	}
+    public Lead() {
+    }
 
-	public void setInProgress(boolean inProgress) {
-		this.inProgress = inProgress;
-	}
+    public Lead(boolean inProgress, boolean rejected, String field,
+            LocalDate dateArrival, LocalDate lastTouched, boolean inPortfolio) {
 
-	public boolean isRejected() {
-		return rejected;
-	}
+        this.inProgress = inProgress;
+        this.rejected = rejected;
+        this.field = field;
+        this.dateArrival = dateArrival;
+        this.lastTouched = lastTouched;
+        this.inPortfolio = inPortfolio;
+    }
 
-	public void setRejected(boolean rejected) {
-		this.rejected = rejected;
-	}
 
-	public String getField() {
-		return field;
-	}
-
-	public void setField(String field) {
-		this.field = field;
-	}
-
-	public LocalDate getDateArrival() {
-		return dateArrival;
-	}
-
-	public void setDateArrival(LocalDate dateArrival) {
-		this.dateArrival = dateArrival;
-	}
-
-	public LocalDate getLastTouched() {
-		return lastTouched;
-	}
-
-	public void setLastTouched(LocalDate lastTouched) {
-		this.lastTouched = lastTouched;
-	}
-
-	public boolean isInPortfolio() {
-		return inPortfolio;
-	}
-
-	public void setInPortfolio(boolean inPortfolio) {
-		this.inPortfolio = inPortfolio;
-	}
-
-	
 }

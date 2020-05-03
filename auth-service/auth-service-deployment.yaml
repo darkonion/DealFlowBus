@@ -20,7 +20,7 @@ spec:
               name: auth-service
         - name: CLOUD_GCP_ENABLED
           value: "true"
-        image: darkonion/auth-service:0.2.0-SNAPSHOT
+        image: darkonion/auth-service:0.2.7-SNAPSHOT
         name: auth-service
         ports:
         - name: liveness-port
@@ -41,38 +41,38 @@ spec:
           initialDelaySeconds: 60    
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
----
-
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    io.kompose.service: auth-service
-  name: auth-service
-spec:
-  type: NodePort
-  ports:
-  - name: "9191"
-    port: 9191
-    protocol: TCP
-    targetPort: 9191
-  sessionAffinity: None
-  selector:
-    io.kompose.service: auth-service
-
----
-
-apiVersion: autoscaling/v1
-kind: HorizontalPodAutoscaler
-metadata:
-  name: auth-service
-  namespace: default
-spec:
-  maxReplicas: 3
-  minReplicas: 1
-  scaleTargetRef:
-    apiVersion: extensions/v1beta1
-    kind: Deployment
-    name: auth-service
-  targetCPUUtilizationPercentage: 70
-
+#---
+#
+#apiVersion: v1
+#kind: Service
+#metadata:
+#  labels:
+#    io.kompose.service: auth-service
+#  name: auth-service
+#spec:
+#  type: NodePort
+#  ports:
+#  - name: "9191"
+#    port: 9191
+#    protocol: TCP
+#    targetPort: 9191
+#  sessionAffinity: None
+#  selector:
+#    io.kompose.service: auth-service
+#
+#---
+#
+#apiVersion: autoscaling/v1
+#kind: HorizontalPodAutoscaler
+#metadata:
+#  name: auth-service
+#  namespace: default
+#spec:
+#  maxReplicas: 1
+#  minReplicas: 1
+#  scaleTargetRef:
+#    apiVersion: extensions/v1beta1
+#    kind: Deployment
+#    name: auth-service
+#  targetCPUUtilizationPercentage: 70
+#

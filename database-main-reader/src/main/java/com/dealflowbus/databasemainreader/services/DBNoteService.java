@@ -1,28 +1,28 @@
 package com.dealflowbus.databasemainreader.services;
 
-import java.time.LocalDate;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-
 import com.dealflowbus.databasemainreader.exceptions.NoteNotFoundException;
 import com.dealflowbus.databasemainreader.models.Lead;
 import com.dealflowbus.databasemainreader.models.Note;
 import com.dealflowbus.databasemainreader.repository.NoteRepository;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class DBNoteService {
 
-	@Autowired
-	private DBLeadService dBLeadService;
-	
-	@Autowired
-	private NoteRepository noteRepo;
-	
-	
-	
+	private final DBLeadService dBLeadService;
+	private final NoteRepository noteRepo;
+
+
+	public DBNoteService(DBLeadService dBLeadService, NoteRepository noteRepo) {
+		this.dBLeadService = dBLeadService;
+		this.noteRepo = noteRepo;
+	}
+
+
 	//getting list of notes in lead
 	public List<Note> getListOfLeadNotes(int id) {
 		
@@ -37,10 +37,10 @@ public class DBNoteService {
 		Lead lead = dBLeadService.retrieveLead(id);
 		lead.setLastTouched(LocalDate.now());
 		note.setIssueDate(LocalDate.now());
-			
-		lead.addNote(note);
 
-		return dBLeadService.saveLead(lead);
+		lead.getNotes().add(note);
+
+		return dBLeadService.updateLead(lead);
 
 	}
 	
